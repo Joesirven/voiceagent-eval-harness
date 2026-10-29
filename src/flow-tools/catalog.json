@@ -1,0 +1,801 @@
+{
+  "version": 1,
+  "templates": {
+    "message_received": "Thanks for contacting us. We have your message and a licensed producer will follow up.",
+    "callback_time_confirmed": "Thanks for your time today. We have the callback time you asked for, and a licensed producer will call you then.",
+    "appointment_confirmed": "Thanks for booking a call with a licensed producer. Your appointment is on the calendar for the time you chose.",
+    "quote_follow_up": "Thanks for your time today. We're putting your workers' compensation quote together, and a licensed producer will text it to you here."
+  },
+  "tools": [
+    {
+      "name": "write_quote_field",
+      "area": "lead_and_contact",
+      "description": "Save one business fact the caller just stated (renewal date, current carrier, payroll, employee count and similar). Only after the caller said it in their own words. quote_channel is how the caller agreed to receive the quote, value exactly text or email: save text only after the caller said yes to a text, email only when the caller asked for email themselves.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "enum": [
+              "x_date",
+              "current_carrier",
+              "payroll",
+              "employee_count",
+              "owner_only",
+              "general_liability",
+              "business_class",
+              "decision_maker_name",
+              "decision_maker_phone",
+              "contact_language",
+              "quote_channel"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "field",
+          "value",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "write_quote_field",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for write_quote_field.",
+      "risk": "reversible_write",
+      "judgeAction": "save_quote_field",
+      "credential": "service_role_key",
+      "status": "queued_after_call",
+      "statusNote": "owner_only, general_liability and business_class have no filing path with the service role key and stay in harness memory and the handoff note; decision_maker_name and decision_maker_phone are filed through the decision-maker offer of record_decision_maker. The producer's Accept runs each field's own writer with its side effects. quote_channel stays in harness memory and the handoff note; it is the caller's verbal agreement, which a producer turns into a consent record in CRM after the call; nothing writes consent from the call."
+    },
+    {
+      "name": "save_contact_detail",
+      "area": "lead_and_contact",
+      "description": "Save a correction to how to reach the owner: their name, the name they go by, their email, or the best time to call. Only with the caller's own words.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "enum": [
+              "owner_name",
+              "goes_by",
+              "email",
+              "contact_window"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "field",
+          "value",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "save_contact_detail",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for save_contact_detail.",
+      "risk": "reversible_write",
+      "judgeAction": "save_details",
+      "credential": "seat_session",
+      "status": "calls_crm_app",
+      "statusNote": "The local CRM stub records this action unless an integrator supplies a CRM client."
+    },
+    {
+      "name": "add_callback_number",
+      "area": "lead_and_contact",
+      "description": "Save a better phone number the caller gave. Read it back and get a yes first.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "pattern": "^\\+?[0-9 ()-]{10,20}$"
+          },
+          "label": {
+            "type": "string",
+            "enum": [
+              "mobile",
+              "office",
+              "other"
+            ]
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "phone",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "add_callback_number",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for add_callback_number.",
+      "risk": "reversible_write",
+      "judgeAction": "save_details",
+      "credential": "seat_session",
+      "status": "calls_crm_app",
+      "statusNote": "The local CRM stub records this action unless an integrator supplies a CRM client."
+    },
+    {
+      "name": "record_decision_maker",
+      "area": "lead_and_contact",
+      "description": "Note who handles the business's insurance when it is not the caller: name, role and a phone number if offered. Only when the caller agrees to share it.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "role": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "phone": {
+            "type": "string",
+            "pattern": "^\\+?[0-9 ()-]{10,20}$"
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "name",
+          "role",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "write_quote_field",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for record_decision_maker.",
+      "risk": "reversible_write",
+      "judgeAction": "save_quote_field",
+      "credential": "service_role_key",
+      "status": "queued_after_call",
+      "statusNote": "deciderOfferFrom (src/lib/crm/leads/decider-offers.ts:67-89) drops an offer with a name but no phone and no email, so a name alone goes into the handoff note instead. Adding the person, the scrub of the number and the email verification wait for the producer's Accept."
+    },
+    {
+      "name": "save_message",
+      "area": "lead_and_contact",
+      "description": "Take a message or service request for the producer, in the caller's own words. Also use it for a callback request (the day and time the caller asked for) and for anything a producer must do that you cannot.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "message",
+              "service_request"
+            ]
+          },
+          "body": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "kind",
+          "body",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "save_message",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for save_message.",
+      "risk": "reversible_write",
+      "judgeAction": "save_details",
+      "credential": "service_role_key",
+      "status": "queued_after_call",
+      "statusNote": "Calling the database function directly skips scrubNoteLines, so the filer must apply the same scrub of personal information that saveContactNote runs (src/app/(app)/cockpit/actions.ts:1529-1590)."
+    },
+    {
+      "name": "check_appointment_time",
+      "area": "scheduling_and_booking",
+      "description": "Check whether a time the caller named is a time that can be booked (at least five minutes and at most sixty days from now, read on the caller's clock) before offering it. Does not check the producer's calendar and does not book.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "day": {
+            "type": "string",
+            "format": "date"
+          },
+          "time": {
+            "type": "string",
+            "pattern": "^[0-2][0-9]:[0-5][0-9]$"
+          }
+        },
+        "required": [
+          "day",
+          "time"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "check_appointment_time",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for check_appointment_time.",
+      "risk": "read_only",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "reads_development_project"
+    },
+    {
+      "name": "book_producer",
+      "area": "scheduling_and_booking",
+      "description": "Book a call with a licensed producer. Only after you read the exact day, date, time and time zone back and the caller said yes to it, in an earlier turn. Never in the same turn as check_appointment_time.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "slot_iso": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "slot_words": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "slot_iso",
+          "slot_words",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "book_producer",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for book_producer.",
+      "risk": "hard_to_undo",
+      "judgeAction": "book",
+      "credential": "seat_session",
+      "status": "calls_crm_app",
+      "statusNote": "The local CRM stub records this action unless an integrator supplies a CRM client."
+    },
+    {
+      "name": "book_callback",
+      "area": "scheduling_and_booking",
+      "description": "Schedule a callback at the time the caller asked to be called back, when they cannot talk now. Read the time back and get a yes first.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "at_words": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "at",
+          "at_words",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "book_callback",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for book_callback.",
+      "risk": "reversible_write",
+      "judgeAction": "book",
+      "credential": "admin_machine_credential",
+      "status": "needs_admin_machine_credential",
+      "statusNote": "The callback waits for the admin machine credential, which keeps the producer's calendar invite and the pause of plan texts (src/lib/crm/reminders/callback.ts:272, :461); a direct cr_appointment insert would skip them."
+    },
+    {
+      "name": "cancel_appointment",
+      "area": "scheduling_and_booking",
+      "description": "Cancel the caller's existing producer appointment when they ask and confirm.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "cancel_appointment",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for cancel_appointment.",
+      "risk": "reversible_write",
+      "judgeAction": "cancel_booking",
+      "credential": "seat_session",
+      "status": "needs_seat_session",
+      "statusNote": "The cancellation waits for a seat session; a status update on cr_appointment alone would leave the event on the producer's calendar and the reminders queued."
+    },
+    {
+      "name": "list_available_producers",
+      "area": "transfer_and_handoff",
+      "description": "Check whether a licensed producer can take a live transfer right now. Use before offering one.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "trace": "list_available_producers",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for list_available_producers.",
+      "risk": "read_only",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "reads_development_project"
+    },
+    {
+      "name": "transfer_to_human",
+      "area": "transfer_and_handoff",
+      "description": "Connect the caller by phone to a licensed producer. Offer a person only when the caller asks for one or the call needs a licensed producer, and call this only after the caller asked for a person or said yes to your offer. Just before calling it, say one short line, such as \"Let me connect you with a licensed producer now.\" If the result says nobody answered, say so in one short sentence and offer to take a message with save_message.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": [
+              "caller_requested"
+            ]
+          },
+          "note_for_producer": {
+            "type": "string",
+            "maxLength": 280
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "reason",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "transfer_to_human",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for transfer_to_human.",
+      "risk": "hard_to_undo",
+      "judgeAction": "transfer",
+      "credential": "seat_session",
+      "status": "runs_in_harness_memory",
+      "statusNote": "A Talk call has no CRM Twilio leg, so the harness places its own Twilio calls to the two test cells only (caller ID the bake-off number ending 2036, nothing recorded) and relays the audio itself; a CRM transfer needs a seat session on a CRM leg, which a harness call is not."
+    },
+    {
+      "name": "send_text",
+      "area": "messaging",
+      "description": "Send the caller one approved text message after offering it aloud and hearing yes.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "template": {
+            "type": "string",
+            "enum": [
+              "message_received",
+              "callback_time_confirmed",
+              "appointment_confirmed",
+              "quote_follow_up"
+            ]
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "template",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "send_text",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for send_text.",
+      "risk": "hard_to_undo",
+      "judgeAction": "send_text",
+      "credential": "seat_session",
+      "status": "runs_in_harness_memory",
+      "statusNote": "The gates run but nothing is sent, and with writes off it is refused; a real send waits for a seat session and still goes through cr_can_reach and the send-time gate."
+    },
+    {
+      "name": "email_document",
+      "area": "messaging",
+      "description": "Email the caller a form they asked for: the loss run request form, or the no known loss statement. Confirm the email address first.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "document": {
+            "type": "string",
+            "enum": [
+              "loss_run_request",
+              "no_known_loss_statement"
+            ]
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "document",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "email_document",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for email_document.",
+      "risk": "hard_to_undo",
+      "judgeAction": "send_email",
+      "credential": "seat_session",
+      "status": "calls_crm_app",
+      "statusNote": "The local CRM stub records this action unless an integrator supplies a CRM client."
+    },
+    {
+      "name": "end_call",
+      "area": "endings",
+      "description": "Say goodbye and end the call, naming how it ended.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "disposition": {
+            "type": "string",
+            "enum": [
+              "booked",
+              "callback",
+              "compliance_review",
+              "declined_ai_or_recording",
+              "do_not_contact",
+              "handed_off",
+              "hung_up",
+              "message_taken",
+              "no_answer",
+              "not_interested",
+              "soft_declined",
+              "talked",
+              "wrong_number"
+            ]
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "disposition"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "record_disposition",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for end_call.",
+      "risk": "hard_to_undo",
+      "judgeAction": "end_with_disposition",
+      "credential": "seat_session",
+      "status": "runs_in_harness_memory",
+      "statusNote": "The hang-up acts in harness memory during the call; filing the disposition waits for a seat session, as logCallOutcome needs a direct database connection (src/lib/crm/spine/call-actions.ts:2617-2627)."
+    },
+    {
+      "name": "mark_not_eligible",
+      "area": "endings",
+      "description": "Record that the business is clearly outside what the agency insures (for example, no employees), with the reason the caller gave.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "reason": {
+            "type": "string",
+            "enum": [
+              "licence",
+              "out_of_business",
+              "out_of_area",
+              "own_carrier",
+              "all_markets_declined",
+              "other"
+            ]
+          },
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "reason",
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "mark_not_eligible",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for mark_not_eligible.",
+      "risk": "reversible_write",
+      "judgeAction": "set_eligibility",
+      "credential": "seat_session",
+      "status": "needs_seat_session",
+      "statusNote": "It waits for a seat session, because the ineligibility row, the stage change, the pause of plan texts and the closing of live tasks are not one transaction with the service role key."
+    },
+    {
+      "name": "read_lead_context",
+      "area": "information_lookups",
+      "description": "Read a short summary of what the agency already knows about this business, to avoid asking again.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "trace": "read_lead_context",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for read_lead_context.",
+      "risk": "read_only",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "reads_development_project"
+    },
+    {
+      "name": "check_quote_status",
+      "area": "information_lookups",
+      "description": "On a callback about an earlier quote, say whether it is ready. A producer goes over the numbers.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "trace": "check_quote_status",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for check_quote_status.",
+      "risk": "read_only",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "reads_development_project"
+    },
+    {
+      "name": "check_carrier_appetite",
+      "area": "information_lookups",
+      "description": "Look up whether carriers have written this kind of business before. A hint for the producer, never a promise of coverage.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "business_class": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "business_class"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "check_carrier_appetite",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for check_carrier_appetite.",
+      "risk": "read_only",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "not_yet_built",
+      "statusNote": "No handler is wired for this optional integration point."
+    },
+    {
+      "name": "save_quote_field",
+      "area": "quote_prototype",
+      "description": "Save one quote detail the caller just gave: full-time or part-time employees, full-time or part-time payroll for the year, or expected revenue for the year, in whole dollars.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "field": {
+            "type": "string",
+            "enum": [
+              "full_time_employees",
+              "part_time_employees",
+              "full_time_payroll",
+              "part_time_payroll",
+              "expected_revenue"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "maxLength": 40
+          }
+        },
+        "required": [
+          "field",
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "save_quote_field",
+      "handler": "Simulated by the console bot. No external system is called.",
+      "crmTarget": "Integrator-defined CRM operation for save_quote_field.",
+      "risk": "reversible_write",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "runs_in_console",
+      "implementation": "simulated",
+      "statusNote": "The console returns a plausible local result and does not call an external system."
+    },
+    {
+      "name": "start_quote",
+      "area": "quote_prototype",
+      "description": "Start the workers' compensation quote with the details gathered so far. Quoting takes minutes; never promise a price.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "trace": "start_quote",
+      "handler": "Simulated by the console bot. No external system is called.",
+      "crmTarget": "Integrator-defined CRM operation for start_quote.",
+      "risk": "hard_to_undo",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "runs_in_console",
+      "implementation": "simulated",
+      "statusNote": "The console returns a plausible local result and does not call an external system."
+    },
+    {
+      "name": "send_quote_link",
+      "area": "quote_prototype",
+      "description": "Send the caller the quote link by text or email, to the number or address they confirmed.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "channel": {
+            "type": "string",
+            "enum": [
+              "text",
+              "email"
+            ]
+          },
+          "destination": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "channel",
+          "destination"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "send_quote_link",
+      "handler": "Simulated by the console bot. No external system is called.",
+      "crmTarget": "Integrator-defined CRM operation for send_quote_link.",
+      "risk": "hard_to_undo",
+      "judgeAction": null,
+      "credential": "seat_session",
+      "status": "runs_in_console",
+      "implementation": "simulated"
+    },
+    {
+      "name": "check_producer_available",
+      "area": "quote_prototype",
+      "description": "Check whether a licensed producer can take the call right now.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "trace": "check_producer_available",
+      "handler": "Simulated by the console bot. No external system is called.",
+      "crmTarget": "Integrator-defined CRM operation for check_producer_available.",
+      "risk": "read_only",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "runs_in_console",
+      "implementation": "simulated",
+      "statusNote": "The console returns a plausible local result and does not call an external system."
+    },
+    {
+      "name": "transfer_to_producer",
+      "area": "quote_prototype",
+      "description": "Hand the caller to the producer now.",
+      "parameters": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "trace": "transfer_to_producer",
+      "handler": "Simulated by the console bot. No external system is called.",
+      "crmTarget": "Integrator-defined CRM operation for transfer_to_producer.",
+      "risk": "hard_to_undo",
+      "judgeAction": null,
+      "credential": "seat_session",
+      "status": "runs_in_console",
+      "implementation": "simulated"
+    },
+    {
+      "name": "take_message",
+      "area": "quote_prototype",
+      "description": "Take a message for the producer, who will call back, in the caller's own words.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          }
+        },
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "take_message",
+      "handler": "Simulated by the console bot. No external system is called.",
+      "crmTarget": "Integrator-defined CRM operation for take_message.",
+      "risk": "reversible_write",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "runs_in_console",
+      "implementation": "simulated",
+      "statusNote": "The console returns a plausible local result and does not call an external system."
+    },
+    {
+      "name": "request_quote",
+      "area": "lead_and_contact",
+      "description": "Start the caller's workers' compensation quote in CRM. Only after the caller asked for a quote or said yes when you offered one, and after their employee count and payroll are saved with write_quote_field. Never say a price: a licensed producer goes over the quote.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "evidence_quote": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "required": [
+          "evidence_quote"
+        ],
+        "additionalProperties": false
+      },
+      "trace": "request_quote",
+      "handler": "Handled by the harness dispatcher with local call state and the configured CRM client.",
+      "crmTarget": "Integrator-defined CRM operation for request_quote.",
+      "risk": "hard_to_undo",
+      "judgeAction": "start_quote",
+      "credential": "seat_session",
+      "status": "calls_crm_app",
+      "statusNote": "The local CRM stub records this action unless an integrator supplies a CRM client."
+    }
+  ]
+}

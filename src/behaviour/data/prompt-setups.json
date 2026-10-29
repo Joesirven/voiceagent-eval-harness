@@ -1,0 +1,144 @@
+{
+  "generatedFrom": "written by hand for the local testing harness; each setup lists the prompt layers it includes. The safety floor is always added.",
+  "setups": [
+    {
+      "id": "playbook-full",
+      "label": "Full playbook, steady professional",
+      "description": "Every layer of the training playbook with the steady professional voice. The default.",
+      "layers": [
+        "identity",
+        "rules",
+        "disclosure",
+        "flow",
+        "openers",
+        "gatekeepers",
+        "discovery",
+        "objections",
+        "booking",
+        "followup",
+        "segment",
+        "personality",
+        "facts"
+      ],
+      "personalityId": "steady-professional"
+    },
+    {
+      "id": "playbook-warm",
+      "label": "Full playbook, warm conversational",
+      "description": "Every layer of the training playbook with the warm conversational voice. Compare with the brisk setup to hear the voice change alone.",
+      "layers": [
+        "identity",
+        "rules",
+        "disclosure",
+        "flow",
+        "openers",
+        "gatekeepers",
+        "discovery",
+        "objections",
+        "booking",
+        "followup",
+        "segment",
+        "personality",
+        "facts"
+      ],
+      "personalityId": "warm-conversational"
+    },
+    {
+      "id": "playbook-brisk",
+      "label": "Full playbook, brisk and direct",
+      "description": "Every layer of the training playbook with the brisk and direct voice.",
+      "layers": [
+        "identity",
+        "rules",
+        "disclosure",
+        "flow",
+        "openers",
+        "gatekeepers",
+        "discovery",
+        "objections",
+        "booking",
+        "followup",
+        "segment",
+        "personality",
+        "facts"
+      ],
+      "personalityId": "brisk-direct"
+    },
+    {
+      "id": "playbook-lean",
+      "label": "Lean playbook, steady professional",
+      "description": "The call flow, discovery, objections and booking only, without the openers, gatekeepers, follow-up messages and contractor notes.",
+      "layers": [
+        "identity",
+        "rules",
+        "disclosure",
+        "flow",
+        "discovery",
+        "objections",
+        "booking",
+        "personality",
+        "facts"
+      ],
+      "personalityId": "steady-professional"
+    },
+    {
+      "id": "rules-and-personality",
+      "label": "Rules and personality",
+      "description": "Who the agent is, the rules, the opening line, the call flow and a voice. No scripted lines for openers, objections or booking.",
+      "layers": [
+        "identity",
+        "rules",
+        "disclosure",
+        "flow",
+        "personality",
+        "facts"
+      ],
+      "personalityId": "steady-professional"
+    },
+    {
+      "id": "rules-only",
+      "label": "Rules only",
+      "description": "Who the agent is, the rules, the opening line and the facts on file. No voice, no scripts.",
+      "layers": [
+        "identity",
+        "rules",
+        "disclosure",
+        "facts"
+      ],
+      "personalityId": "none"
+    },
+    {
+      "id": "floor-only",
+      "label": "Safety floor only",
+      "description": "The non-removable safety floor, the opening line and the facts on file. Shows what the model does with almost no guidance.",
+      "layers": [
+        "disclosure",
+        "facts"
+      ],
+      "personalityId": "none",
+      "notes": "Every setup includes the safety floor; this one adds nothing else."
+    },
+    {
+      "id": "lab-natural",
+      "label": "Insurance sales lab, natural voice",
+      "description": "One natural sales prompt written from the insurance sales lab playbook: it drives each call to the quote details and a yes to the quote by text, with the call's facts filled in as variables. The rules, the opening disclosure and the facts on file are still generated; the other layers come from lab-voice-agent.md.",
+      "layers": [
+        "identity",
+        "rules",
+        "disclosure",
+        "flow",
+        "openers",
+        "gatekeepers",
+        "discovery",
+        "objections",
+        "booking",
+        "segment",
+        "personality",
+        "facts"
+      ],
+      "personalityId": "warm-conversational",
+      "overridesFile": "lab-voice-agent.md",
+      "notes": "Select it with VOICE_HARNESS_PROMPT_SETUP=lab-natural at server start, or POST /api/prompt-setup/select with {\"promptSetupId\": \"lab-natural\"}."
+    }
+  ]
+}

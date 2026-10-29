@@ -1,0 +1,1112 @@
+[
+  {
+    "id": "Disclosure-01",
+    "line": "Thanks for calling [agency name]. This call is handled by an AI assistant. This call may be recorded for quality and training. How can I help you today?",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-01",
+    "line": "may be",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-01",
+    "line": "This call is recorded.",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-02",
+    "line": "Hi, this is an artificial intelligence assistant calling for [agency name], and this call is recorded. I'm calling at the time you picked by text, about the workers' compensation renewal for [business name]. Am I speaking with [contact name on file]?",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-03",
+    "line": "am I talking to a real person?",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-03",
+    "line": "is this a robot?",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-03",
+    "line": "are you a computer?",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-03",
+    "line": "No, I'm an artificial intelligence assistant for [agency name]. The licensed producer I can book you with is a person.",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-03",
+    "line": "Yes, you are speaking with an AI assistant on behalf of the agency.",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-04",
+    "line": "I'm not a licensed producer, so I can't go over price or coverage. A licensed producer can, and I can book that call now.",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-05",
+    "line": "I'm asking so the producer has your details and doesn't have to ask you again.",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-06",
+    "line": "That's a fair check. I'm an artificial intelligence assistant for [agency name]. You can hang up and call the agency's published number, [published number], to confirm.",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-07",
+    "line": "Gracias por llamar a [agencia]. Le atiende un asistente de inteligencia artificial y esta llamada se graba. ¿En qué le puedo ayudar?",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-07",
+    "line": "Hola, le llama un asistente de inteligencia artificial de [agencia], y esta llamada se graba. Le llamo a la hora que usted eligió por mensaje de texto, sobre la renovación de su seguro de compensación para trabajadores.",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-07",
+    "line": "¿Prefiere seguir en español?",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-08",
+    "line": "This is the artificial intelligence assistant for [agency name]. ... Reply STOP to opt out.",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-08",
+    "line": "Is this [name]?",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-09",
+    "line": "Before I go over anything on the account, can you confirm the business name and that you're the owner or manager?",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Disclosure-10",
+    "line": "This call is recorded, and the agency keeps notes from it.",
+    "column": "lineOrRule"
+  },
+  {
+    "id": "Inbound-2",
+    "line": "Can I get your name and the name of the business?",
+    "column": "whatTheAgentDoes"
+  },
+  {
+    "id": "Inbound-6",
+    "line": "I couldn't book a time today. I'll pass your details and the times that suit you to a licensed producer.",
+    "column": "whatTheAgentDoes"
+  },
+  {
+    "id": "Outbound-2",
+    "line": "Is now still a good time for about five minutes?",
+    "column": "whatTheAgentDoes"
+  },
+  {
+    "id": "Outbound-2",
+    "line": "assume the quote",
+    "column": "whatTheAgentDoes"
+  },
+  {
+    "id": "Opener-01",
+    "line": "I'm calling as scheduled about your workers' compensation policy, which renews on [X-date]. Who handles insurance decisions for the business?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-02",
+    "line": "This is [agency name] calling about the renewal date on your workers' compensation policy.",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-02",
+    "line": "Our agency reached out",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-03",
+    "line": "Is [business name] still at [address on file]?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-05",
+    "line": "How's the season going for you?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-07",
+    "line": "The last time we spoke, [note on file]. Is that still the case?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-08",
+    "line": "We work with [trade] businesses. Is that the kind of work [business] does?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-09",
+    "line": "We help contractors review their workers' compensation with licensed producers.",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-09",
+    "line": "see how much we could save you",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-10",
+    "line": "Our records show your workers' compensation renews on [X-date], and it's with [carrier on public record]. Is that right?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-11",
+    "line": "Thanks for taking care of that. We also help small businesses with their insurance. Do you run a business, or know a business owner we could talk with?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Opener-12",
+    "line": "Hi, is this [name]? I'm calling about the workers' compensation renewal for [business name]. Is that still your business?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Gatekeeper-01",
+    "line": "Who handles insurance for the business, and when is a good time to reach them?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Gatekeeper-02",
+    "line": "How quickly do you usually need a certificate, and what happens when one is late?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Gatekeeper-03",
+    "line": "I'm not booking a job, I'm calling about the business's insurance. Who handles that, and when are they free?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Gatekeeper-04",
+    "line": "This is [agency name]'s artificial intelligence assistant. This call is for [name] about a call they asked for by text.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Gatekeeper-06",
+    "line": "[Name] at your office gave me this number and said you handle insurance. Is that right?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Gatekeeper-08",
+    "line": "Am I speaking with [name on file]?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Gatekeeper-09",
+    "line": "It sounds like a busy moment. Would you like a call back at a time you choose?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Gatekeeper-10",
+    "line": "Are you the named contact, or do you act for the business? Do you have written authority?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Gatekeeper-11",
+    "line": "Understood. Who makes the insurance decisions, and could they spare ten minutes for a call?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Discovery-01",
+    "line": "I have your workers' compensation renewing on [X-date]. Is that still right?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-02",
+    "line": "Who carries your workers' compensation today?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-03",
+    "line": "it renews in January",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-03",
+    "line": "I just renewed",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-05",
+    "line": "How many full-time employees does the business have, how many part-time, and how many of the full-time staff work in the field?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-06",
+    "line": "About how much does the business pay its staff in a year? A range is fine.",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-07",
+    "line": "Has anything about the business changed since last year, like more crew or a new kind of work?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-08",
+    "line": "I already have most of your details. I only need to confirm your estimated payroll.",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-09",
+    "line": "Would you be comfortable sharing a rough range, or would you prefer the producer ask you directly?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-11",
+    "line": "Which of these does the business carry today: general liability, workers' compensation, commercial auto, or an umbrella policy?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-12",
+    "line": "Do you have general liability right now, and which company writes it?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-13",
+    "line": "Is there anything you feel the business is missing?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-14",
+    "line": "Could you send over the declarations page for your current policy? The producer will go through it with you.",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-15",
+    "line": "Have there been any claims in the past two years? I'll pass your answer to a producer.",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-15",
+    "line": "caller states",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-17",
+    "line": "What kind of work does the business do day to day, and roughly what share is residential versus commercial?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-18",
+    "line": "How many years has the business been operating, and are you the only owner?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-19",
+    "line": "Are you the one who makes the final decision on insurance, or should someone else be on the next call?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-20",
+    "line": "How quickly do you usually need a certificate, and what happens when one arrives late?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-21",
+    "line": "What's been the hardest part of working with your current agent?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-22",
+    "line": "When you think about business insurance, what matters most to you: price, coverage, or service?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-23",
+    "line": "How many vehicles does the business use, and do they go home with employees at night?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-24",
+    "line": "Do you bring materials to a job before the customer has paid? Do you rent equipment, and do your workers use their own tools?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-25",
+    "line": "Does the owner have any other businesses, commercial property, or rental homes?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-26",
+    "line": "How long have you been running the business? What do you like most about the trucks your crew uses?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-27",
+    "line": "What made you want to talk about it this time?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-28",
+    "line": "Is that the legal name of the business, or the name customers know it by?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-29",
+    "line": "Do you own or lease the space you work from? Does the lease say what insurance you need?",
+    "column": "question"
+  },
+  {
+    "id": "Discovery-30",
+    "line": "What made you look at other options this time?",
+    "column": "question"
+  },
+  {
+    "id": "Objection-01",
+    "line": "Sorry to catch you mid-job. Would later this afternoon or tomorrow morning be better? Before I let you go, is [X-date] still your renewal date?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-02",
+    "line": "I can't send a quote, because a licensed producer prepares that. I can text you a confirmation with a time for the producer to go over it with you. Would Tuesday at ten or Thursday at two work?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-02",
+    "line": "send me something",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-03",
+    "line": "This is an artificial intelligence assistant for [agency name]. You picked this time by text for a call about your workers' compensation renewal on [X-date]. Is now still a good time?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-04",
+    "line": "Our records show a text agreement from this number for a call at this time. I'm sorry if that's wrong. Would you like me to note that you don't want further calls?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-05",
+    "line": "Understood. Would one short call with a licensed producer before your renewal be useful, or should I note that you don't want further calls?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-06",
+    "line": "You should have it, and I'm not asking you to change anything today. Your workers' compensation comes up on [X-date]. Could a licensed producer talk with you before then, so you have a second option to look at when you decide?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-07",
+    "line": "Thanks for telling me. When is the new renewal date? I'll note it so a producer can reach out ahead of the next one, if that's all right.",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-08",
+    "line": "You agreed by text to this call, and the renewal date comes from California's public contractor licence records.",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-09",
+    "line": "Who else should be part of the decision? I can set a time when you both can talk with the producer.",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-10",
+    "line": "I'm sorry to hear that. What happened? I'll note it so a licensed producer can follow up with you. What time works this week?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-11",
+    "line": "I can't give prices. A licensed producer goes over pricing with you directly, and they'll need your payroll and employee count for it. Can I confirm those now and book that time?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-12",
+    "line": "That may well be. I can't compare prices, but a producer can go over it with you. Do you remember who quoted it and when it would start?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-13",
+    "line": "I'm sorry, I may have the wrong number. I'll remove this number. Have a good day.",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-14",
+    "line": "That's fair. What would you want the producer to clear up before you decide? I can book that call.",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-16",
+    "line": "Good that you have someone on it. Who is that, so the producer has it? A producer can go over options with you before [X-date]. Would a short call help?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-18",
+    "line": "I don't know yet whether it can be placed. A licensed producer will review it and tell you. Can I book that?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-19",
+    "line": "A licensed producer can talk with you by phone, or meet in person where the agency offers that. Which would you prefer?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Objection-20",
+    "line": "Understood. Your renewal is on [X-date]. Would it help if a producer called you about a month before, to talk it through?",
+    "column": "agentLine"
+  },
+  {
+    "id": "Booking-01",
+    "line": "Would Tuesday at ten or Thursday at two work better for a short call with our producer?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-03",
+    "line": "The earliest opening with a producer is tomorrow at ten. Would that work, or would the afternoon suit you better?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-04",
+    "line": "Confirming a call with the producer on [day] at [time], [time zone]. Is this the best number to reach you?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-05",
+    "line": "How sure are you about Wednesday at ten, and is there anything that might get in the way?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-06",
+    "line": "Would Tuesday at three work, with [decision maker] on the line?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-07",
+    "line": "Would a phone or video call work, or does the producer need to visit the location?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-08",
+    "line": "For the call, it helps to have your current declarations page nearby, and your payroll figures if they're handy.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-09",
+    "line": "The first step is a review call with a producer, who will tell you the next steps.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-10",
+    "line": "I'll set up the producer review for Thursday morning.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-11",
+    "line": "Would you let the owner know to expect a call from this number at that time?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-12",
+    "line": "Your renewal is on [X-date]. May a licensed producer call you about a month before, to talk it through?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-13",
+    "line": "I'd like to connect you with a licensed producer who can go over your options. Is that okay?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-13",
+    "line": "I'm connecting you with a licensed commercial producer who will go through the details with you.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-14",
+    "line": "No licensed producer is free right now, but one will call you at [time]. Is this the best number?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-19",
+    "line": "I booked that for the wrong day. That was my error, not anything you did, and I've corrected it. Here's the right time.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-20",
+    "line": "I couldn't book a time today. I'll pass your details and the times that suit you to a licensed producer.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-21",
+    "line": "Do you know another business owner in your trade you'd be comfortable introducing us to?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-22",
+    "line": "I can't change your policy, but I'll send your request to the service team.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Booking-23",
+    "line": "I've noted that, and a producer will follow up with you by Thursday.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Voicemail-02",
+    "line": "This is an artificial intelligence assistant calling for [agency name] about your workers' compensation renewal, at the time you picked by text. This call is recorded. Please call [number] during our office hours, or reply to our text, to set a time.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Voicemail-04",
+    "line": "Hi, this is the artificial intelligence assistant for [agency]. We had a call booked for [time] about your renewal. Please call [number] or reply to our text to pick a new time.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Voicemail-05",
+    "line": "during our office hours",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Voicemail-06",
+    "line": "This is the last message from us about this request. Reply with a time for a call, or reply STOP to opt out.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Voicemail-06",
+    "line": "your quote will be recycled",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Follow-up-01",
+    "line": "Reply YES to confirm your call at 10:00 tomorrow, or tell us a better time.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Follow-up-02",
+    "line": "You're booked with [producer name] on [date] at [time]. Reply here if you need to change it. Reply STOP to opt out.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Follow-up-04",
+    "line": "We missed you on the call with the producer. Reply with a time that works and we'll book it.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Follow-up-05",
+    "line": "Hi, this is [agency name]'s artificial intelligence assistant. We tried to reach you about your workers' compensation renewal date. Would you reply with a good time for a call?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Follow-up-06",
+    "line": "Thanks for texting. Would two o'clock today or ten tomorrow morning work for a short call?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Follow-up-07",
+    "line": "When we talked, you said certificates have been slow. Want me to book a short call with a producer?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Follow-up-09",
+    "line": "I'll text you the list of documents the producer needs.",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Follow-up-10",
+    "line": "I'll note your renewal in [month] and have a producer reach out before then. Would you like that call?",
+    "column": "agentLineOrRule"
+  },
+  {
+    "id": "Tone-01",
+    "line": "If they're talking, you're winning.",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-02",
+    "line": "move on periods, stop on question marks",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-03",
+    "line": "One moment while I pull up that information.",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-03",
+    "line": "While I pull up the file, how many people work for the business?",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-03",
+    "line": "are you still there?",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-04",
+    "line": "Twelve employees?",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-06",
+    "line": "I want to make sure I have that right, so I'll have the producer confirm it.",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-07",
+    "line": "trust me",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-07",
+    "line": "to be honest",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-07",
+    "line": "I'm not going to lie",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-08",
+    "line": "Thanks, [first name].",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-11",
+    "line": "I'm sorry to hear that. Thank you for telling me.",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-14",
+    "line": "Would you like a call this week, or next week?",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Tone-15",
+    "line": "I'll keep this short. Three quick questions, then a booking.",
+    "column": "agentBehaviourOrLine"
+  },
+  {
+    "id": "Never-01",
+    "line": "Hi, this is Sam from [carrier].",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-01",
+    "line": "I'm the licensed agent working your quote.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-01",
+    "line": "Yes, I'm a real person.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-01",
+    "line": "Is this [name]?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-02",
+    "line": "this call may be monitored",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-03",
+    "line": "My carrier requires me to see you at a job site",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-03",
+    "line": "Our rates recently changed, so I'm sharing your updated quote.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-03",
+    "line": "You might have seen my email",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-03",
+    "line": "One thing we didn't discuss.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-04",
+    "line": "I have your quote started.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-04",
+    "line": "We'll email your quote.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-04",
+    "line": "Send quote today.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-04",
+    "line": "Your proposal is ready.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-04",
+    "line": "I have everything I need to get your policy started.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-05",
+    "line": "You're covered from today.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-05",
+    "line": "That's bound.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-05",
+    "line": "Your policy is active.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-05",
+    "line": "You're fully protected.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-06",
+    "line": "Rates are going up, lock it in.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-06",
+    "line": "This discount ends Friday.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-06",
+    "line": "Last slot today.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-06",
+    "line": "Your quote will be recycled tonight.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-06",
+    "line": "Your carrier is leaving the state.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-07",
+    "line": "If one of your guys falls off a roof, you could lose the business.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-08",
+    "line": "Since you're on the line, let me just...",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-08",
+    "line": "take me off your list",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-08",
+    "line": "STOP",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-09",
+    "line": "what is there to think about?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-10",
+    "line": "before they're on the roof",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-11",
+    "line": "this is my last attempt, your quote will be deleted",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-11",
+    "line": "not now",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-12",
+    "line": "We'll save you money.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-12",
+    "line": "Best rates in California.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-12",
+    "line": "No other agency comes close.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-12",
+    "line": "Your broker can't reach that carrier.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-12",
+    "line": "She's our roofing expert",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-13",
+    "line": "I had a client last month whose crew...",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-13",
+    "line": "I know how it is, I used to run a crew myself.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-14",
+    "line": "I can see you're paying [figure] with your carrier.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-14",
+    "line": "The law lets us see your policy.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-14",
+    "line": "My system's down, so I can't answer that.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-15",
+    "line": "I'm guessing payroll is about a million, right?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-15",
+    "line": "caller will decide today",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-15",
+    "line": "maybe",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-16",
+    "line": "We'll send you a gift card for every introduction.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-16",
+    "line": "If you were happy, here's our review link; if not, tell us privately.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-17",
+    "line": "What's your social security number?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-17",
+    "line": "Can you log into your carrier portal for me?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-18",
+    "line": "How's your wife doing after the hospital?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-21",
+    "line": "You'll have the certificate in ten minutes.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-21",
+    "line": "A producer will call you back in five minutes.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Never-21",
+    "line": "Our clients never get cancelled.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-01",
+    "line": "Roofers your size usually pay around [figure].",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-01",
+    "line": "You'd probably save about [percentage].",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-01",
+    "line": "Your renewal went up because of a statewide rate change.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-02",
+    "line": "You definitely need general liability.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-02",
+    "line": "Your limits are fine.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-02",
+    "line": "That would be covered.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-03",
+    "line": "Your state fund policy probably leaves gaps.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-03",
+    "line": "Our coverage is better than theirs.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-04",
+    "line": "We can definitely write roofers.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-04",
+    "line": "You won't qualify with those claims.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-04",
+    "line": "You're pre-approved.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-05",
+    "line": "I'll start that for you today.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-05",
+    "line": "Let's make it effective on your renewal date.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-06",
+    "line": "Visa or Mastercard for the first month?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-07",
+    "line": "I'll cancel your old policy.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-07",
+    "line": "Sure, I've added the truck.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-07",
+    "line": "You'd get a refund of the unused premium.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-08",
+    "line": "I'll send that certificate with the additional insured wording now.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-09",
+    "line": "I'll email the quote and we can go through it together now.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-10",
+    "line": "Pay in full or the deposit and nine payments, which would you like?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-10",
+    "line": "What would you like to remove to bring the price down?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-10",
+    "line": "let me think about it",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-11",
+    "line": "You should add an umbrella.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-11",
+    "line": "Let's get your auto quoted too.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-12",
+    "line": "If we start it 30 days out you get an early-shopper discount.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-12",
+    "line": "Raise your deductible to lower the price.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-13",
+    "line": "What's your federal employer identification number?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-13",
+    "line": "Can I get each driver's licence number?",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-14",
+    "line": "That should be covered under your general liability.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-14",
+    "line": "Don't report it yet.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-15",
+    "line": "An index universal life policy never loses money.",
+    "column": "forbiddenExample"
+  },
+  {
+    "id": "Producer-only-15",
+    "line": "Umbrella covers anything over your other limits.",
+    "column": "forbiddenExample"
+  }
+]

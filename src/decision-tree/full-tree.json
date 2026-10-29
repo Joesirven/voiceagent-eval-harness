@@ -1,0 +1,637 @@
+{
+  "id": "northwind-renewal",
+  "version": "1",
+  "start": "entry.greeting",
+  "starts": {
+    "inbound": "entry.greeting",
+    "outbound": "entry.outbound",
+    "knownLead": "identity.confirm"
+  },
+  "maxClarifications": 2,
+  "escalation": {
+    "say": "I will ask a licensed producer to follow up. Thank you for your time. Goodbye.",
+    "disposition": "completed"
+  },
+  "interrupts": {
+    "question": "Is the caller asking to stop contact, asking about automation, or otherwise interrupting the current question?",
+    "clarify": "Sorry, could you say that again?",
+    "answers": [
+      {
+        "answer": "none",
+        "meaning": "The caller answers or acknowledges the current question.",
+        "minConfidence": 0
+      },
+      {
+        "answer": "unclear",
+        "meaning": "The caller's latest line is too unclear to classify.",
+        "minConfidence": 0
+      },
+      {
+        "answer": "asks_if_automated",
+        "meaning": "The caller asks whether the assistant is automated.",
+        "minConfidence": 0.75,
+        "resume": true,
+        "say": "Yes. I am an automated assistant for Northwind Insurance Agency. A licensed producer can follow up if you prefer."
+      },
+      {
+        "answer": "asks_for_person",
+        "meaning": "The caller asks to speak with a licensed producer.",
+        "minConfidence": 0.75,
+        "next": "booking.offer"
+      },
+      {
+        "answer": "asks_to_stop",
+        "meaning": "The caller clearly asks Northwind Insurance Agency to stop calling.",
+        "minConfidence": 0.75,
+        "next": "compliance.stop"
+      }
+    ]
+  },
+  "repeatRule": {
+    "say": "Understood. Thank you for your time. Goodbye.",
+    "disposition": "completed"
+  },
+  "dispositions": [
+    {
+      "name": "booked",
+      "label": "Producer call booked",
+      "durable": false,
+      "meaning": "The caller booked a call with a licensed producer.",
+      "crmEquivalent": "appointment"
+    },
+    {
+      "name": "completed",
+      "label": "Call completed",
+      "durable": false,
+      "meaning": "The call ended without a booking or durable refusal.",
+      "crmEquivalent": "talked"
+    },
+    {
+      "name": "not_interested",
+      "label": "Not interested",
+      "durable": true,
+      "meaning": "The caller clearly said that they are not interested in the renewal conversation.",
+      "crmEquivalent": "not_interested"
+    },
+    {
+      "name": "do_not_contact",
+      "label": "Do not contact",
+      "durable": true,
+      "meaning": "The caller clearly asked the agency to stop calling.",
+      "crmEquivalent": "do_not_contact"
+    }
+  ],
+  "nodes": [
+{
+  "id": "entry.outbound",
+  "label": "Outbound greeting and consent",
+  "area": "entry",
+  "flowStep": "disclosure",
+  "situation": "Northwind Insurance Agency calls a small business owner about a policy renewal.",
+  "agentGoal": "Introduce the agency and get consent to continue.",
+  "agentLines": [
+    {
+      "line": "Hello, this is Northwind Insurance Agency calling about a business policy renewal. This call may be recorded. May I continue?",
+      "direction": "outbound"
+    }
+  ],
+  "clarify": "May I continue with a few renewal questions?",
+  "sources": [
+    "fictional public example"
+  ],
+  "decision": {
+    "question": "Did the caller consent to continue?",
+    "answers": [
+      {
+        "answer": "unclear",
+        "minConfidence": 0
+      },
+      {
+        "answer": "consents",
+        "meaning": "The caller agrees to continue.",
+        "minConfidence": 0.7,
+        "next": "identity.confirm"
+      },
+      {
+        "answer": "declines",
+        "meaning": "The caller does not consent to continue.",
+        "minConfidence": 0.8,
+        "disposition": "completed",
+        "say": "Understood. Thank you for your time. Goodbye.",
+        "onBlocked": {
+          "say": "Sorry, should I end the call now?"
+        },
+        "judge": {
+          "codeRules": [
+            "the caller does not consent to continue."
+          ],
+          "question": "Did the caller decline to continue?",
+          "minConfidence": 0.8
+        }
+      }
+    ]
+  }
+}
+    ,
+    {
+      "id": "compliance.stop",
+      "label": "Confirm stop request",
+      "area": "safety",
+      "situation": "The caller asked the agency to stop calling.",
+      "agentGoal": "Confirm the stop request and end the call.",
+      "agentLines": [
+        {
+          "line": "To confirm, do you want Northwind Insurance Agency to stop calling?"
+        }
+      ],
+      "clarify": "Should Northwind Insurance Agency stop calling you?",
+      "sources": [
+        "fictional public example"
+      ],
+      "decision": {
+        "question": "Did the caller confirm the stop request?",
+        "answers": [
+          {
+            "answer": "unclear",
+            "minConfidence": 0
+          },
+          {
+            "answer": "confirms",
+            "meaning": "The caller confirms that the agency must stop calling.",
+            "minConfidence": 0.85,
+            "disposition": "do_not_contact",
+            "say": "Understood. We will stop calling. Goodbye.",
+            "onBlocked": {
+              "say": "I could not confirm the request. A person will review it."
+            },
+            "judge": {
+              "codeRules": [
+                "the caller clearly confirmed the stop request"
+              ],
+              "question": "Did the caller clearly confirm that the agency must stop calling?",
+              "minConfidence": 0.85
+            }
+          },
+          {
+            "answer": "does_not_confirm",
+            "meaning": "The caller says they do not want to confirm a stop request.",
+            "minConfidence": 0.75,
+            "disposition": "completed",
+            "say": "Thank you for clarifying. Goodbye.",
+            "onBlocked": {
+              "say": "I could not confirm what you want. A person will review it."
+            },
+            "judge": {
+              "codeRules": [
+                "the caller did not confirm the stop request"
+              ],
+              "question": "Did the caller say they do not want to confirm a stop request?",
+              "minConfidence": 0.75
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "entry.greeting",
+      "label": "Greeting and consent",
+      "area": "entry",
+      "flowStep": "disclosure",
+      "situation": "Northwind Insurance Agency is calling a small business owner about a policy renewal.",
+      "agentGoal": "Introduce the agency and get consent to continue.",
+      "agentLines": [
+        {
+          "line": "Hello, this is Northwind Insurance Agency calling about a business policy renewal. This call may be recorded. May I continue?"
+        }
+      ],
+      "clarify": "May I continue with a few renewal questions?",
+      "sources": [
+        "fictional public example"
+      ],
+      "decision": {
+        "question": "Did the caller consent to continue?",
+        "answers": [
+          {
+            "answer": "unclear",
+            "minConfidence": 0
+          },
+          {
+            "answer": "returning_missed_calls",
+            "meaning": "The caller says they are returning an earlier call and agrees to continue.",
+            "minConfidence": 0.7,
+            "next": "identity.confirm"
+          },
+          {
+            "answer": "consents",
+            "meaning": "The caller agrees to continue.",
+            "minConfidence": 0.7,
+            "next": "identity.confirm"
+          },
+          {
+            "answer": "declines",
+            "meaning": "The caller does not consent to continue.",
+            "minConfidence": 0.8,
+            "disposition": "completed",
+            "say": "Understood. Thank you for your time. Goodbye.",
+            "onBlocked": {
+              "say": "Sorry, should I end the call now?"
+            },
+            "judge": {
+              "codeRules": [
+                "the caller does not consent to continue."
+              ],
+              "question": "Did the caller decline to continue?",
+              "minConfidence": 0.8
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "identity.confirm",
+      "label": "Confirm the right person",
+      "area": "open",
+      "flowStep": "recognize_lead",
+      "situation": "The caller consented to continue.",
+      "agentGoal": "Confirm that the caller handles the business policy renewal.",
+      "agentLines": [
+        {
+          "line": "Are you the person who handles the business insurance renewal for Riverside Plumbing?"
+        }
+      ],
+      "clarify": "Do you handle the business insurance renewal for Riverside Plumbing?",
+      "sources": [
+        "fictional public example"
+      ],
+      "decision": {
+        "question": "Is the caller the right person for the renewal?",
+        "answers": [
+          {
+            "answer": "unclear",
+            "minConfidence": 0
+          },
+          {
+            "answer": "right_person",
+            "meaning": "The caller confirms that they handle the renewal.",
+            "minConfidence": 0.75,
+            "next": "discovery.employees"
+          },
+          {
+            "answer": "wrong_person",
+            "meaning": "The caller says they do not handle the renewal.",
+            "minConfidence": 0.75,
+            "disposition": "completed",
+            "say": "Thank you. I will let the agency team know. Goodbye.",
+            "onBlocked": {
+              "say": "Sorry, do you handle the business insurance renewal?"
+            },
+            "judge": {
+              "codeRules": [
+                "the caller says they do not handle the renewal."
+              ],
+              "question": "Did the caller say they do not handle the renewal?",
+              "minConfidence": 0.75
+            }
+          },
+          {
+            "answer": "not_interested",
+            "meaning": "The caller clearly says they are not interested.",
+            "minConfidence": 0.85,
+            "disposition": "not_interested",
+            "say": "Understood. Thank you for your time. Goodbye.",
+            "onBlocked": {
+              "say": "To confirm, are you saying you are not interested in discussing the renewal?"
+            },
+            "judge": {
+              "codeRules": [
+                "the caller clearly says they are not interested."
+              ],
+              "question": "Did the caller clearly say they are not interested?",
+              "minConfidence": 0.85
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "discovery.employees",
+      "label": "Ask employee count",
+      "area": "discovery",
+      "flowStep": "quote_fields",
+      "situation": "The right person agreed to discuss the renewal.",
+      "agentGoal": "Collect the current employee count.",
+      "agentLines": [
+        {
+          "line": "About how many employees does Riverside Plumbing have now?"
+        }
+      ],
+      "clarify": "What is the current employee count?",
+      "sources": [
+        "fictional public example"
+      ],
+      "decision": {
+        "question": "Did the caller give the current employee count?",
+        "answers": [
+          {
+            "answer": "unclear",
+            "minConfidence": 0
+          },
+          {
+            "answer": "gave_count",
+            "meaning": "The caller gives an employee count or says there are no employees.",
+            "minConfidence": 0.75,
+            "extract": {
+              "as": "employees",
+              "with": "caller_line"
+            },
+            "action": {
+              "type": "save_quote_field",
+              "field": "employee_count",
+              "from": "employees"
+            },
+            "next": "discovery.payroll",
+            "onBlocked": {
+              "say": "I could not verify that employee count. What is the current count?"
+            },
+            "judge": {
+              "codeRules": [
+                "the employee count is in the caller's own words"
+              ],
+              "question": "Did the caller give this employee count?",
+              "minConfidence": 0.75
+            }
+          },
+          {
+            "answer": "not_interested",
+            "meaning": "The caller clearly says they are not interested.",
+            "minConfidence": 0.85,
+            "disposition": "not_interested",
+            "say": "Understood. Thank you for your time. Goodbye.",
+            "onBlocked": {
+              "say": "To confirm, are you saying you are not interested in discussing the renewal?"
+            },
+            "judge": {
+              "codeRules": [
+                "the caller clearly says they are not interested."
+              ],
+              "question": "Did the caller clearly say they are not interested?",
+              "minConfidence": 0.85
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "discovery.payroll",
+      "label": "Ask annual payroll",
+      "area": "discovery",
+      "flowStep": "quote_fields",
+      "situation": "The caller gave the current employee count.",
+      "agentGoal": "Collect an estimated annual payroll.",
+      "agentLines": [
+        {
+          "line": "What is the estimated annual payroll for the business?"
+        }
+      ],
+      "clarify": "About what is the annual payroll?",
+      "sources": [
+        "fictional public example"
+      ],
+      "decision": {
+        "question": "Did the caller give an annual payroll estimate?",
+        "answers": [
+          {
+            "answer": "unclear",
+            "minConfidence": 0
+          },
+          {
+            "answer": "gave_payroll",
+            "meaning": "The caller gives an annual payroll amount or estimate.",
+            "minConfidence": 0.75,
+            "extract": {
+              "as": "payrollValue",
+              "with": "caller_line"
+            },
+            "action": {
+              "type": "save_quote_field",
+              "field": "payroll",
+              "from": "payrollValue"
+            },
+            "next": "booking.offer",
+            "onBlocked": {
+              "say": "I could not verify that payroll amount. What is the annual estimate?"
+            },
+            "judge": {
+              "codeRules": [
+                "the payroll amount is in the caller's own words"
+              ],
+              "question": "Did the caller give this payroll amount?",
+              "minConfidence": 0.75
+            }
+          },
+          {
+            "answer": "not_interested",
+            "meaning": "The caller clearly says they are not interested.",
+            "minConfidence": 0.85,
+            "disposition": "not_interested",
+            "say": "Understood. Thank you for your time. Goodbye.",
+            "onBlocked": {
+              "say": "To confirm, are you saying you are not interested in discussing the renewal?"
+            },
+            "judge": {
+              "codeRules": [
+                "the caller clearly says they are not interested."
+              ],
+              "question": "Did the caller clearly say they are not interested?",
+              "minConfidence": 0.85
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "booking.offer",
+      "label": "Offer a producer call",
+      "area": "booking",
+      "flowStep": "booking",
+      "situation": "The caller answered the renewal questions.",
+      "agentGoal": "Offer a call with a licensed producer.",
+      "agentLines": [
+        {
+          "line": "Would you like to book a short call with Dana Reyes, a licensed producer, to review the renewal options?"
+        }
+      ],
+      "clarify": "Would you like a producer to call you about the renewal?",
+      "sources": [
+        "fictional public example"
+      ],
+      "decision": {
+        "question": "Does the caller want to book a producer call?",
+        "answers": [
+          {
+            "answer": "unclear",
+            "minConfidence": 0
+          },
+          {
+            "answer": "accepts",
+            "meaning": "The caller wants to book a producer call.",
+            "minConfidence": 0.75,
+            "next": "booking.time"
+          },
+          {
+            "answer": "declines",
+            "meaning": "The caller declines a producer call without refusing future contact.",
+            "minConfidence": 0.75,
+            "disposition": "completed",
+            "say": "No problem. Thank you for your time. Goodbye.",
+            "onBlocked": {
+              "say": "Sorry, should I close the call without booking?"
+            },
+            "judge": {
+              "codeRules": [
+                "the caller declines a producer call without refusing future contact."
+              ],
+              "question": "Did the caller decline the producer call?",
+              "minConfidence": 0.75
+            }
+          },
+          {
+            "answer": "not_interested",
+            "meaning": "The caller clearly says they are not interested.",
+            "minConfidence": 0.85,
+            "disposition": "not_interested",
+            "say": "Understood. Thank you for your time. Goodbye.",
+            "onBlocked": {
+              "say": "To confirm, are you saying you are not interested in discussing the renewal?"
+            },
+            "judge": {
+              "codeRules": [
+                "the caller clearly says they are not interested."
+              ],
+              "question": "Did the caller clearly say they are not interested?",
+              "minConfidence": 0.85
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "booking.time",
+      "label": "Choose a call time",
+      "area": "booking",
+      "flowStep": "booking",
+      "situation": "The caller wants a producer call.",
+      "agentGoal": "Get a day and time from the caller.",
+      "agentLines": [
+        {
+          "line": "What day and time would work for the producer call?"
+        }
+      ],
+      "clarify": "What day and time should Dana Reyes call?",
+      "sources": [
+        "fictional public example"
+      ],
+      "decision": {
+        "question": "Did the caller give a day and time?",
+        "answers": [
+          {
+            "answer": "unclear",
+            "minConfidence": 0
+          },
+          {
+            "answer": "gave_time",
+            "meaning": "The caller gives a day and clock time.",
+            "minConfidence": 0.75,
+            "extract": {
+              "as": "slot",
+              "with": "time"
+            },
+            "next": "booking.confirm",
+            "say": "I have {slotWords}. Should I book that time?"
+          },
+          {
+            "answer": "declines",
+            "meaning": "The caller no longer wants to book.",
+            "minConfidence": 0.75,
+            "disposition": "completed",
+            "say": "No problem. Thank you for your time. Goodbye.",
+            "onBlocked": {
+              "say": "Should I close the call without booking?"
+            },
+            "judge": {
+              "codeRules": [
+                "the caller no longer wants to book."
+              ],
+              "question": "Did the caller decline to book a time?",
+              "minConfidence": 0.75
+            }
+          }
+        ]
+      }
+    },
+    {
+      "id": "booking.confirm",
+      "label": "Confirm the call time",
+      "area": "booking",
+      "flowStep": "booking",
+      "situation": "The caller gave a day and time.",
+      "agentGoal": "Get clear confirmation before booking.",
+      "agentLines": [
+        {
+          "line": "Should I book the producer call for {slotWords}?"
+        }
+      ],
+      "clarify": "Please say yes if I should book {slotWords}.",
+      "sources": [
+        "fictional public example"
+      ],
+      "decision": {
+        "question": "Did the caller confirm the stated time?",
+        "answers": [
+          {
+            "answer": "unclear",
+            "minConfidence": 0
+          },
+          {
+            "answer": "confirms",
+            "meaning": "The caller clearly confirms the stated day and time.",
+            "minConfidence": 0.8,
+            "action": {
+              "type": "book",
+              "from": "slot"
+            },
+            "disposition": "booked",
+            "say": "The producer call is booked. Thank you, and goodbye.",
+            "onBlocked": {
+              "say": "I could not confirm the booking. Should I book {slotWords}?"
+            },
+            "judge": {
+              "codeRules": [
+                "the caller confirmed the read-back time"
+              ],
+              "question": "Did the caller clearly confirm this booking time?",
+              "minConfidence": 0.8
+            }
+          },
+          {
+            "answer": "declines",
+            "meaning": "The caller declines the stated time.",
+            "minConfidence": 0.75,
+            "disposition": "completed",
+            "say": "No problem. Thank you for your time. Goodbye.",
+            "onBlocked": {
+              "say": "Should I close the call without booking?"
+            },
+            "judge": {
+              "codeRules": [
+                "the caller declines the stated time."
+              ],
+              "question": "Did the caller decline this booking time?",
+              "minConfidence": 0.75
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

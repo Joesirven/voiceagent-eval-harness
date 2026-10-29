@@ -1,0 +1,29 @@
+html, body, #root { height: 100%; margin: 0; }
+
+/* The configuration chooser sits in the console header, left of the theme and panel buttons. */
+.config-bar { position: fixed; top: 8px; right: 270px; z-index: 50; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.config-field { height: 36px; border: 1px solid var(--color-input); border-radius: 8px; background: var(--color-secondary); color: var(--color-foreground); padding: 0 10px; font: inherit; }
+.config-field:disabled { opacity: .5; }
+button.config-field { cursor: pointer; }
+.config-error { color: var(--color-destructive); font-size: 12px; }
+select.config-field { max-width: 260px; }
+@media (max-width: 900px) { .config-bar { display: none; } }
+
+/* Configuration panel. Temporarily docked at the right edge until the console layout has a slot for it. */
+.config-dock { position: fixed; top: 72px; right: 12px; bottom: 12px; width: 300px; overflow-y: auto; z-index: 40; padding: 12px; border: 1px solid var(--color-border); border-radius: 8px; background: var(--color-card); color: var(--color-foreground); font-size: 13px; }
+.config-panel { display: flex; flex-direction: column; gap: 10px; }
+.config-row { display: flex; flex-direction: column; gap: 3px; }
+.config-row > label { font-size: 12px; font-weight: 600; }
+.config-row select.config-field { width: 100%; max-width: none; height: 32px; font-size: 13px; }
+.config-hint { color: var(--color-muted-foreground); font-size: 12px; line-height: 1.35; }
+.config-note { margin: 2px 0 0; color: var(--color-muted-foreground); font-size: 12px; }
+.config-save { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.config-save .config-error { flex-basis: 100%; }
+@media (max-width: 900px) { .config-dock { position: static; width: auto; margin: 8px 16px; } }
+
+/* Lead state card under the configuration. */
+.lead-state { margin-top: 16px; font-size: 13px; }
+.lead-state h3 { font-size: 13px; font-weight: 600; margin: 0 0 6px; }
+.lead-state h4 { font-size: 12px; font-weight: 600; margin: 8px 0 2px; color: var(--color-muted-foreground); }
+.lead-state ul { margin: 0; padding-left: 16px; }
+.lead-state-note { color: var(--color-muted-foreground); font-size: 12px; }

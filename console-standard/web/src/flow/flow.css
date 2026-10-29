@@ -1,0 +1,32 @@
+/* The Flow panel: same borders, radius and colours as the console, through its css variables. */
+.flow-panel { display: flex; width: 100%; height: 78vh; min-height: 34rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-card); color: var(--color-card-foreground); overflow: hidden; font-size: 14px; }
+.flow-editor { position: relative; display: flex; flex: 1 1 0; flex-direction: column; min-width: 0; min-height: 0; }
+.flow-frame { flex: 1 1 0; width: 100%; min-height: 0; border: 0; background: var(--color-background); }
+.flow-alert { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--color-border); background: var(--color-muted); }
+.flow-alert-text { flex: 1 1 12rem; min-width: 0; }
+.flow-side { display: flex; flex: 0 0 auto; flex-direction: column; width: 26rem; max-width: 45%; min-height: 0; border-left: 1px solid var(--color-border); background: var(--color-card); overflow: hidden; }
+.flow-side-closed { width: auto; max-width: none; }
+.flow-side-head { display: flex; align-items: center; gap: 8px; padding: 8px; border-bottom: 1px solid var(--color-border); }
+.flow-heading { margin: 0; font-size: 14px; font-weight: 500; }
+.flow-subheading { margin: 0 0 4px; font-size: 12px; font-weight: 500; }
+.flow-side-body { display: flex; flex: 1 1 0; flex-direction: column; gap: 12px; min-height: 0; padding: 12px; overflow-x: hidden; overflow-y: auto; }
+.flow-side-body p { margin: 0; }
+.flow-muted { color: var(--color-muted-foreground); font-size: 12px; }
+.flow-note { font-size: 12px; }
+.flow-line { font-size: 12px; overflow-wrap: anywhere; }
+.flow-mono { font-family: var(--font-mono); font-size: 12px; }
+.flow-wrap { overflow-wrap: anywhere; }
+.flow-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.flow-table th { text-align: left; font-weight: 500; color: var(--color-muted-foreground); }
+.flow-table th, .flow-table td { padding: 4px 6px 4px 0; border-bottom: 1px solid var(--color-border); vertical-align: top; overflow-wrap: anywhere; }
+.flow-badge { display: inline-block; padding: 0 6px; border: 1px solid var(--color-border); border-radius: 999px; font-size: 11px; white-space: nowrap; }
+.flow-badge-write { background: var(--color-secondary); color: var(--color-secondary-foreground); }
+.flow-badge-danger { border-color: var(--color-destructive); color: var(--color-destructive); }
+.flow-box { padding: 8px; border: 1px solid var(--color-border); border-radius: 8px; }
+.flow-box-warning { border-color: var(--color-destructive); }
+.flow-side-body ul { margin: 4px 0 0; padding-left: 16px; }
+@media (max-width: 900px) {
+  .flow-panel { flex-direction: column; height: auto; }
+  .flow-frame { min-height: 28rem; }
+  .flow-side, .flow-side-closed { width: auto; max-width: none; border-left: 0; border-top: 1px solid var(--color-border); }
+}

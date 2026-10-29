@@ -1,0 +1,7 @@
+[
+  {"id": "quote-prototype", "name": "Quote prototype", "note": "Gathers the quote details, sends the quote link, hands off to the producer or takes a message.", "sttModel": "nova-3-general", "replyDeployment": "default", "voice": "aura-2-thalia-en", "endpointingMs": 300, "vadStopSecs": 0.2, "orchestration": "quote_prototype"},
+  {"id": "quick-and-light", "name": "Quick and light", "note": "Smallest Azure reply model, short pauses: fastest answers.", "sttModel": "nova-3-general", "replyDeployment": "gpt-5.4-mini", "voice": "aura-2-thalia-en", "endpointingMs": 200, "vadStopSecs": 0.2},
+  {"id": "harness-default", "name": "Harness default", "note": "What the harness page on 4311 uses for the Deepgram path.", "sttModel": "nova-3-general", "replyDeployment": "default", "voice": "aura-2-thalia-en", "endpointingMs": 300, "vadStopSecs": 0.2},
+  {"id": "most-capable", "name": "Most capable reply", "note": "The largest Azure reply model: best wording, slower first word.", "sttModel": "nova-3-general", "replyDeployment": "gpt-5.6-terra", "voice": "aura-2-thalia-en", "endpointingMs": 300, "vadStopSecs": 0.2},
+  {"id": "patient-listener", "name": "Patient listener, warm voice", "note": "Waits longer before answering so callers are not cut off; calmer voice.", "sttModel": "nova-3-general", "replyDeployment": "gpt-5.6-luna", "voice": "aura-2-andromeda-en", "endpointingMs": 600, "vadStopSecs": 0.5}
+]

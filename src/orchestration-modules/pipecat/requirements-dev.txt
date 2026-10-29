@@ -1,0 +1,10 @@
+# Developer-only tools; production installs requirements.txt alone.
+# Install into a copy of the Pipecat environment, never the shared one (see docs/orchestration-modules.md).
+#   uv pip install --python /tmp/crm-pipecat-venv-devtools/bin/python -r src/orchestration-modules/pipecat/requirements-dev.txt
+# Whisker (pipecat-ai-whisker) records a call's pipeline to data/whisker/<call id>.whisk; see devtools.py.
+# Installing it moved websockets from 17.3 to 15.0.1 and added msgpack; pinned so the
+# environment is reproducible. Check the Deepgram sidecar tests after any change here.
+-r requirements.txt
+pipecat-ai-whisker==2.0.1
+websockets==15.0.1
+msgpack==1.2.3

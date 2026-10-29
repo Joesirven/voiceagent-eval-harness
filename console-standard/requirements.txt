@@ -1,0 +1,5 @@
+# Own virtual environment for the standard console bot (not the shared Pipecat one):
+#   uv venv --python 3.12 /tmp/crm-console-standard-venv
+#   uv pip install --python /tmp/crm-console-standard-venv/bin/python -r console-standard/requirements.txt
+pipecat-ai[webrtc,runner,deepgram,openai,silero]==1.13.0
+deepgram-sdk==7.13.0

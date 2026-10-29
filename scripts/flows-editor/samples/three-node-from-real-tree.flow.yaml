@@ -1,0 +1,44 @@
+# Hand-made three-node flow taken from src/decision-tree/full-tree.json
+# (open.greeting, open.identity_gate, open.why_we_called). Used to prove the
+# round trip until the compiler lands. Transition-only functions need no Python.
+initial_node: open.greeting
+
+nodes:
+  open.greeting:
+    task_messages:
+      - role: developer
+        content: >
+          Say: Thank you for calling the agency. This call is handled by an AI
+          assistant. This call may be recorded for quality and training. Is this
+          about a call you got from us earlier, or is there something else I can
+          help with? Then listen.
+    functions:
+      - name: returning_missed_calls
+        transition_only: true
+        description: The caller says someone called them, they have a missed call, or they are calling back.
+        transition_to: open.identity_gate
+      - name: asks_why_we_called_or_who_this_is
+        transition_only: true
+        description: The caller asks who this is, why we called, or how we got their number.
+        transition_to: open.why_we_called
+
+  open.identity_gate:
+    task_messages:
+      - role: developer
+        content: >
+          Say: Thanks. So I have this right, may I have your name and the name
+          of the business you're with?
+    functions:
+      - name: wrong_number
+        transition_only: true
+        description: The caller says this is the wrong number.
+        transition_to: open.why_we_called
+
+  open.why_we_called:
+    task_messages:
+      - role: developer
+        content: >
+          Answer truthfully: we tried to reach contractors about their workers'
+          compensation renewal, listed in a public record. Then say goodbye.
+    post_actions:
+      - type: end_conversation

@@ -1,0 +1,158 @@
+{
+  "generatedFrom": "grading-rubric.md",
+  "gates": [
+    {
+      "id": "Gate-01",
+      "statement": "The first agent turn says the caller is speaking with an artificial intelligence assistant, in the caller's language.",
+      "checkedBy": "`assertOpeningDisclosures` (proposed), both directions",
+      "rules": "Never-01",
+      "source": "context 05 §5.2 item 5; c13 sections/wednesday-workshop.md (compliance never item); brief"
+    },
+    {
+      "id": "Gate-02",
+      "statement": "The first agent turn says the call is recorded.",
+      "checkedBy": "`assertOpeningDisclosures` (proposed)",
+      "rules": "Never-02",
+      "source": "brief; c18 sections/wednesday-workshop.md (Krisp AI, never item)"
+    },
+    {
+      "id": "Gate-03",
+      "statement": "No never rule broken anywhere in the call or the follow-up text.",
+      "checkedBy": "Speech guard log plus `auditTranscript` (proposed)",
+      "rules": "Never-01 to Never-21",
+      "source": "`enforcement.md`"
+    },
+    {
+      "id": "Gate-04",
+      "statement": "No producer-only act or statement: no price, coverage advice, comparison, eligibility judgement, binding, payment, policy change, certificate issue, quote delivery or close.",
+      "checkedBy": "Speech guard log plus `auditTranscript`",
+      "rules": "Producer-only-01 to Producer-only-15",
+      "source": "`enforcement.md`; c18 sections/wednesday-workshop.md (Perfect Call Demo: producer-only parts of the checklist); c10 sections/agency-owner-training.md (Agency Growth Checklist: price and purchase items)"
+    },
+    {
+      "id": "Gate-05",
+      "statement": "A stop request ended the call and suppressed every channel; a second identical objection ended the call.",
+      "checkedBy": "`detectOptOut`, `ObjectionCounter`, lead record after the call",
+      "rules": "Never-08, Never-09",
+      "source": "context 05 §5.2 item 3; context 18 §18.1; c13 sections/wednesday-workshop.md (grade stop requests honoured)"
+    },
+    {
+      "id": "Gate-06",
+      "statement": "Every fact in the handoff note is backed by the caller's own words, and every promise matches a booking or message record.",
+      "checkedBy": "`rejectUnsupportedFields` (existing), caller-only evidence and `validatePromise` (proposed)",
+      "rules": "Never-15, Never-21",
+      "source": "c08 sections/agency-owner-training.md (never item: misreporting a call); c02 courses/commercial-summit-2024.md (score on whether every stated fact came from the caller or the file)"
+    },
+    {
+      "id": "Gate-07",
+      "statement": "The call was placed only after every dial gate passed (suppression, consent, window, agreed time, caller identification).",
+      "checkedBy": "Call log reasons from `CallHarness.runOutbound`",
+      "rules": "Never-10, Never-11, Never-19",
+      "source": "context 05 §5.2; c05 courses/one-call-close-masterclass-2025.md (pre-call check)"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "Criterion-01",
+      "title": "Opening yeses",
+      "metWhen": "The caller says yes at least three times in the first 60 seconds, each time confirming a fact already on the lead record. Adapted: a yes to a guessed fact does not count.",
+      "source": "Client Experience Checklist item 1, c05 courses/one-call-close-masterclass-2025.md (Client Experience Checklist, Lesson 2); c14 sections/wednesday-workshop.md (Saving Money... But Not Ready to Switch); c17 sections/wednesday-workshop.md (Revised Hook and Homeowners Script); c19 sections/wednesday-workshop.md (How to Have \"Perfect\" Calls)"
+    },
+    {
+      "id": "Criterion-02",
+      "title": "Purpose first, no pause",
+      "metWhen": "The reason for the call comes right after the disclosures, is true and backed by the record, and is followed straight away by a confirming question.",
+      "source": "c15 sections/wednesday-workshop.md (How to CRUSH Your Call Opening); c13 sections/wednesday-workshop.md (opener on a call the lead agreed to); context 16 §16.4 point 3"
+    },
+    {
+      "id": "Criterion-03",
+      "title": "Fast first confirmation",
+      "metWhen": "The first caller confirmation comes within about 30 seconds of the greeting, with no long monologue.",
+      "source": "c06 courses/sdr-training.md (The Hook: Strategy)"
+    },
+    {
+      "id": "Criterion-04",
+      "title": "X-date",
+      "metWhen": "The X-date is confirmed or corrected, with caller evidence, even if nothing is booked.",
+      "source": "context 03 §3.4 item 1; c08 sections/agency-owner-training.md (measure what the agent controls); c10 sections/agency-owner-training.md (score against the four priorities)"
+    },
+    {
+      "id": "Criterion-05",
+      "title": "Payroll",
+      "metWhen": "A payroll figure or range is recorded in the caller's words, with its period.",
+      "source": "context 03 §3.4 item 2; c08 sections/agency-owner-training.md (check each handoff)"
+    },
+    {
+      "id": "Criterion-06",
+      "title": "Employee count",
+      "metWhen": "An employee count is recorded (full-time and part-time where given).",
+      "source": "context 03 §3.4 item 2; c08 sections/agency-owner-training.md"
+    },
+    {
+      "id": "Criterion-07",
+      "title": "Current coverage, general liability by name",
+      "metWhen": "The agent asked what the business carries now and asked about general liability by name, and recorded the answer without judging it.",
+      "source": "context 03 §3.4 item 3; c08 sections/agency-owner-training.md (coverage gaps, especially general liability)"
+    },
+    {
+      "id": "Criterion-08",
+      "title": "A concrete next step",
+      "metWhen": "The call ends with one of: a booked producer time read back with day, time and number; a message plus a dated next step; or a logged reason for no booking.",
+      "source": "context 12 §12.5 item 3; c06 courses/one-call-close-masterclass-2025.md (score the close of the call); c12 sections/morning-roleplay.md (Closing Objections Workflow); c20 sections/wednesday-workshop.md (booked time at the close); c02 courses/commercial-summit-2024.md (score on whether a next step was booked)"
+    },
+    {
+      "id": "Criterion-09",
+      "title": "Objections handled in shape",
+      "metWhen": "Each objection got acknowledge, bridge, then a question that returned to the interrupted step. Cues the caller gave (hesitation, a vague objection, a skipped confirmation) were followed up.",
+      "source": "c12 sections/score-my-call.md (reviewers listen for cues); c13 sections/wednesday-workshop.md (grade the process: objections raised and responses given); context 11 §11.5; context 18 §18.2"
+    },
+    {
+      "id": "Criterion-10",
+      "title": "No open loops",
+      "metWhen": "Every agent turn except the exit ends with a question or a clear next step, and no turn hands the caller an easy out such as \"have you had a chance to look?\".",
+      "source": "c06 courses/one-call-close-masterclass-2025.md (Follow Up with Quoted Leads: score every turn); context 18 §18.6 item 4"
+    },
+    {
+      "id": "Criterion-11",
+      "title": "No dead air",
+      "metWhen": "No agent silence over five seconds. Lookups are covered by a status line such as \"Give me one moment to check that.\"",
+      "source": "Client Experience Checklist item 13; c05 courses/one-call-close-masterclass-2025.md; c13 sections/wednesday-workshop.md (Call Recording: All Closed Deals Aren't Wins); c14 sections/wednesday-workshop.md (The Biggest Mistake Producers Make); c17 sections/wednesday-workshop.md"
+    },
+    {
+      "id": "Criterion-12",
+      "title": "Two open, non-insurance questions",
+      "metWhen": "At least two open questions not about insurance, built from what the caller said or what is on file (for example \"How's the season going?\").",
+      "source": "c14 sections/wednesday-workshop.md (How To Build Rapport When Selling Insurance); c17 sections/wednesday-workshop.md; c15 sections/wednesday-workshop.md (\"Perfect Call (according to him)\"); c10 sections/agency-owner-training.md (Agency Growth Checklist)"
+    },
+    {
+      "id": "Criterion-13",
+      "title": "Tone and tempo",
+      "metWhen": "Upbeat and purposeful throughout, slowed to match a businesslike or rushed caller. The one subjective item; a reviewer may score it on a one-to-five scale against a recorded example and convert 4 or 5 to a point.",
+      "source": "Client Experience Checklist item 15; c05 courses/one-call-close-masterclass-2025.md (Lesson 3: The Hook, Strategy); c15 sections/wednesday-workshop.md (grade tone throughout); c17 sections/wednesday-workshop.md (match the lead's pace); c11 sections/morning-roleplay.md (one-to-five rapport and tempo scale)"
+    },
+    {
+      "id": "Criterion-14",
+      "title": "Introduction ask",
+      "metWhen": "The agent asked for an introduction to another business owner, accepted only names the caller offered, contacted no one, and offered no reward. Not applicable when the caller opted out or was distressed.",
+      "source": "Client Experience Checklist item 12; c05 courses/one-call-close-masterclass-2025.md; c14 sections/wednesday-workshop.md (How To Improve a \"Perfect Call\"); c17 sections/wednesday-workshop.md (ask for a referral at the end)"
+    },
+    {
+      "id": "Criterion-15",
+      "title": "Handoff a producer can act on",
+      "metWhen": "From the note alone, the producer can call back without re-asking anything the caller already said. That covers the X-date, payroll, employees, coverage and gaps, decision maker, objections in order, promise, next step and language.",
+      "source": "c08 sections/agency-owner-training.md (check each handoff before it is marked done); c19 sections/wednesday-workshop.md (a colleague can act without research); context 17 §17.3 (the customer is never asked twice)"
+    },
+    {
+      "id": "Criterion-16",
+      "title": "One question at a time, caller's name used",
+      "metWhen": "No stacked questions, and the caller's name is used early and again later.",
+      "source": "c20 sections/wednesday-workshop.md (score on one question at a time and name used); c15 sections/wednesday-workshop.md (Was this a \"Perfect Call?\")"
+    },
+    {
+      "id": "Criterion-17",
+      "title": "Language parity",
+      "metWhen": "The call ran in the caller's preferred language, with the disclosures in that language. Not applicable for an English-speaking caller.",
+      "source": "context 03 §3.6"
+    }
+  ]
+}

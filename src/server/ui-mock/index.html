@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Voice agent evaluation · Developer role-play</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="/mock/mock.css">
+</head>
+<body>
+<header class="brand-bar">
+  <div class="brand"><svg viewBox="0 0 48 48" width="36" height="36" aria-hidden="true"><rect width="48" height="48" rx="10" fill="#1f7c74"/><g fill="white"><path d="M9 27A15 15 0 0 1 39 27Z"/><rect x="9" y="30" width="30" height="3"/><rect x="9" y="36" width="30" height="3"/></g></svg><span>Cover<span class="brand-teal">Rail</span></span></div>
+  <span class="environment">Developer role-play</span>
+</header>
+<header class="setup" id="setup">
+  <div class="intro"><div><h1>Play the conversation.</h1><p>Choose a lead. Follow the words, decisions and checks.</p></div><span class="demo-label">Scripted demo</span></div>
+  <div class="setup-row">
+    <div class="field lead-field"><label for="lead">Lead</label><select id="lead"></select><div class="lead-meta" id="leadMeta"></div></div>
+    <div class="field direction-field"><label for="direction">Direction</label><select id="direction"><option value="inbound">Inbound callback</option><option value="outbound">Outbound attempt</option></select><div class="lead-meta" id="attemptMeta"></div></div>
+    <div class="call-buttons"><button id="start" class="start" type="button">Start role-play</button><button id="hangup" class="hangup" type="button" disabled>End</button></div>
+  </div>
+  <details class="configuration"><summary>Module configuration</summary><div class="config-fields">
+    <div class="field"><label for="voice">Voice module</label><select id="voice"></select></div>
+    <div class="field"><label for="decision">Decision module</label><select id="decision"></select></div>
+    <div class="field"><label for="prompt">Prompt setup</label><select id="prompt"></select></div>
+  </div></details>
+  <div class="test-mode" role="status"><strong>Test mode · browser only.</strong> Scripted playback. No number is dialled. Consent, quiet-hours and do-not-call checks are shown as skipped.</div>
+</header>
+
+<details class="context" id="context">
+  <summary><span class="summary-title">What the agent was told</span><span class="summary-hint" id="contextHint"></span></summary>
+  <div class="context-body" id="contextBody"></div>
+</details>
+
+<section class="transport" id="transport" aria-label="Playback">
+  <button id="playPause" type="button" disabled>Pause</button>
+  <span class="clock" id="clock">0:00</span>
+  <input id="scrub" type="range" min="0" max="63200" value="0" step="50" aria-label="Scrub the call" disabled>
+  <span class="clock" id="total">1:03</span>
+  <label class="speed"><span>Speed</span><select id="speed"><option value="1">1x</option><option value="2">2x</option><option value="4" selected>4x</option></select></label>
+  <span class="transport-note" id="transportNote">Start role-play to play the scripted conversation.</span>
+</section>
+
+<section class="summary-sheet" id="summary" hidden>
+  <h2>End of call</h2>
+  <div class="summary-grid">
+    <div><div class="k">Outcome</div><div class="v" id="sumOutcome"></div></div>
+    <div><div class="k">Disposition</div><div class="v stamp" id="sumDisposition"></div></div>
+    <div><div class="k">Judge score</div><div class="v" id="sumScore"></div></div>
+  </div>
+  <div class="k">Handoff note for the producer</div>
+  <p class="handoff" id="sumHandoff"></p>
+  <div class="k">Quote fields captured, each with the caller words that support it</div>
+  <table class="fields" id="sumFields"><tbody></tbody></table>
+</section>
+
+<main class="work">
+  <section class="record" aria-label="Transcript">
+    <div class="record-head"><h2>Transcript</h2><span class="panel-hint">The conversation</span></div>
+    <div class="rows" id="rows" tabindex="0" role="region" aria-label="Transcript lines"></div>
+    <div class="record-empty" id="recordEmpty">Your conversation will appear here.</div>
+  </section>
+  <section class="record trace-panel" aria-label="Reasoning trace">
+    <div class="record-head"><h2>Reasoning trace</h2><span class="panel-hint">The system’s actions</span></div>
+    <div class="rows" id="traceRows" tabindex="0" role="region" aria-label="Reasoning events"></div>
+    <div class="record-empty" id="traceEmpty">Checks and decisions will appear here.</div>
+  </section>
+
+  <aside class="side">
+    <section class="panel route" aria-label="Decision tree and disposition">
+      <h2>Decision tree <span class="disposition" id="disposition">no disposition yet</span></h2>
+      <ol class="path" id="path"></ol>
+      <div class="latest" id="latest"></div>
+      <div class="branches-head">From here the module can answer</div>
+      <ul class="branches" id="branches"></ul>
+      <div class="said-next" id="saidNext"></div>
+    </section>
+
+    <section class="panel judge" aria-label="Judge scoreboard">
+      <h2>Judge <span class="hint">Action checks and final score</span></h2>
+      <ul class="verdicts" id="verdicts"></ul>
+      <div class="score" id="score"></div>
+    </section>
+  </aside>
+</main>
+<script type="module" src="/mock/mock.js"></script>
+</body>
+</html>

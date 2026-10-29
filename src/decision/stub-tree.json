@@ -1,0 +1,261 @@
+{
+  "id": "stub-tree",
+  "version": "0.1.0",
+  "start": "disclosure",
+  "maxClarifications": 2,
+  "escalation": {
+    "say": "I am having trouble following, so let me bring in a person who can help.",
+    "disposition": "handed_off"
+  },
+  "dispositions": [
+    { "name": "talked", "label": "Talked", "durable": false, "meaning": "A real conversation happened and no lasting outcome applies." },
+    { "name": "not_interested", "label": "Not interested", "durable": true, "meaning": "The caller clearly said they are not interested. Takes the lead off the list." },
+    { "name": "do_not_contact", "label": "Do not call", "durable": true, "meaning": "The caller asked not to be contacted again." },
+    { "name": "booked", "label": "Booked", "durable": false, "meaning": "A producer time was booked." },
+    { "name": "message_left", "label": "Message left", "durable": false, "meaning": "The caller left a message for the team." },
+    { "name": "handed_off", "label": "Handed to a person", "durable": false, "meaning": "The call was transferred to a person." },
+    { "name": "quote_started", "label": "Quote started", "durable": false, "meaning": "A quote detail was saved and the quote will be prepared." },
+    { "name": "wrong_number", "label": "Wrong number", "durable": false, "meaning": "The person on the line is not the lead." },
+    { "name": "no_answer", "label": "No answer", "durable": false, "meaning": "An outbound attempt rang out. Nothing was said or left." },
+    { "name": "voicemail_no_message", "label": "Voicemail, no message", "durable": false, "meaning": "An outbound attempt reached voicemail. The call was ended without leaving a message." }
+  ],
+  "nodes": [
+    {
+      "id": "disclosure",
+      "label": "Disclosure",
+      "flowStep": "disclosure",
+      "agentLines": [
+        {
+          "line": "Hello {firstName}, this is an AI assistant calling on behalf of the agency. Am I speaking with {firstName}?",
+          "direction": "outbound"
+        }
+      ],
+      "next": "recognize_lead"
+    },
+    {
+      "id": "recognize_lead",
+      "label": "Recognize the lead",
+      "flowStep": "recognize_lead",
+      "clarify": "Sorry, could I check who I am speaking with?",
+      "decision": {
+        "question": "Is the person on the line the lead on file? A greeting or a plain yes counts as yes; the number already matched the lead.",
+        "answers": [
+          { "answer": "yes", "next": "discovery", "carry": true, "minConfidence": 0.65 },
+          {
+            "answer": "no",
+            "disposition": "wrong_number",
+            "say": "Sorry for the trouble. I will let the team know. Goodbye.",
+            "minConfidence": 0.7,
+            "onBlocked": { "say": "Sorry, could I check who I am speaking with?" }
+          },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    },
+    {
+      "id": "discovery",
+      "label": "Discovery",
+      "flowStep": "discovery",
+      "agentLines": [{ "line": "Thanks, {firstName}. How can I help you today?" }],
+      "clarify": "Sorry, I did not catch that. Are you after a quote, a call with a producer, or to leave a message?",
+      "decision": {
+        "question": "What does the caller want? Judge only the caller's own words.",
+        "answers": [
+          { "answer": "quote", "meaning": "Wants an insurance quote.", "next": "quote_fields", "minConfidence": 0.65 },
+          { "answer": "book", "meaning": "Wants a time with a producer.", "next": "booking", "minConfidence": 0.65 },
+          { "answer": "message", "meaning": "Wants to leave a message.", "next": "message", "minConfidence": 0.65 },
+          {
+            "answer": "human",
+            "meaning": "Asks to speak with a person.",
+            "action": { "type": "transfer", "reason": "caller_requested" },
+            "disposition": "handed_off",
+            "say": "One moment, I will connect you with a person.",
+            "minConfidence": 0.7,
+            "onBlocked": { "say": "I can help with that. Are you after a quote, a call with a producer, or to leave a message?" }
+          },
+          { "answer": "objection", "meaning": "Raises a concern such as price or having cover already.", "next": "objection", "minConfidence": 0.65 },
+          {
+            "answer": "not_interested",
+            "meaning": "Clearly says they are not interested.",
+            "disposition": "not_interested",
+            "say": "Understood. Thank you for your time. Goodbye.",
+            "minConfidence": 0.8,
+            "onBlocked": { "say": "No problem. Is there anything I can help you with?" }
+          },
+          {
+            "answer": "do_not_call",
+            "meaning": "Asks not to be contacted again.",
+            "disposition": "do_not_contact",
+            "say": "Understood. I will not contact you again. Goodbye.",
+            "minConfidence": 0.8,
+            "onBlocked": { "say": "Just to be sure, what would you like me to do?" }
+          },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    },
+    {
+      "id": "quote_fields",
+      "label": "Quote details",
+      "flowStep": "quote_fields",
+      "agentLines": [{ "line": "Happy to help with a quote. What year is the vehicle?" }],
+      "clarify": "Sorry, what year is the vehicle?",
+      "decision": {
+        "question": "Did the caller give a vehicle year?",
+        "answers": [
+          {
+            "answer": "year_given",
+            "next": "quote_wrap",
+            "extract": { "as": "vehicle_year", "with": "year" },
+            "action": { "type": "save_quote_field", "field": "vehicle_year", "from": "vehicle_year" },
+            "minConfidence": 0.65,
+            "onBlocked": { "say": "I could not save that. Let me have a person follow up.", "next": "discovery" }
+          },
+          { "answer": "no", "next": "discovery", "say": "That is fine, we can fill that in later. What else can I help with?", "minConfidence": 0.7 },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    },
+    {
+      "id": "quote_wrap",
+      "label": "Quote wrap-up",
+      "flowStep": "quote_fields",
+      "agentLines": [{ "line": "Got it, a {vehicle_year}. We will prepare your quote. Is there anything else I can help with?" }],
+      "promise": "prepare your quote",
+      "clarify": "Sorry, is there anything else I can help with?",
+      "decision": {
+        "question": "Does the caller want anything else?",
+        "answers": [
+          { "answer": "no", "disposition": "quote_started", "say": "Great, you will hear from us soon. Goodbye.", "minConfidence": 0.7, "onBlocked": { "say": "Is there anything else I can help with?", "next": "discovery" } },
+          { "answer": "yes", "next": "discovery", "say": "Of course. What else can I help with?", "minConfidence": 0.7 },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    },
+    {
+      "id": "booking",
+      "label": "Booking: ask for a time",
+      "flowStep": "booking",
+      "agentLines": [{ "line": "Sure. What day and time works for a call with a producer?" }],
+      "clarify": "Sorry, what day and time would you like?",
+      "decision": {
+        "question": "Did the caller give a day or a time?",
+        "answers": [
+          { "answer": "time_given", "next": "booking_confirm", "extract": { "as": "slot", "with": "time" }, "minConfidence": 0.65 },
+          { "answer": "no", "next": "discovery", "say": "No problem. What else can I help with?", "minConfidence": 0.7 },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    },
+    {
+      "id": "booking_confirm",
+      "label": "Booking: confirm",
+      "flowStep": "booking",
+      "agentLines": [{ "line": "Just to confirm: {slotWords}. Shall I book that?" }],
+      "clarify": "Sorry, should I book {slotWords}? Please say yes or no.",
+      "decision": {
+        "question": "Did the caller say yes to the time read back to them?",
+        "answers": [
+          { "answer": "no", "next": "booking", "say": "No problem. What day and time works instead?", "minConfidence": 0.7 },
+          {
+            "answer": "yes",
+            "next": "booking_wrap",
+            "action": { "type": "book", "from": "slot" },
+            "minConfidence": 0.7,
+            "onBlocked": { "say": "I could not book that. Let me have a person follow up.", "next": "discovery" }
+          },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    },
+    {
+      "id": "booking_wrap",
+      "label": "Booking wrap-up",
+      "flowStep": "booking",
+      "agentLines": [{ "line": "Your producer call is booked for {slotWords}. Is there anything else I can help with?" }],
+      "promise": "Your producer call is booked",
+      "clarify": "Sorry, is there anything else I can help with?",
+      "decision": {
+        "question": "Does the caller want anything else?",
+        "answers": [
+          { "answer": "no", "disposition": "booked", "say": "Wonderful, talk to you then. Goodbye.", "minConfidence": 0.7, "onBlocked": { "say": "Is there anything else I can help with?", "next": "discovery" } },
+          { "answer": "yes", "next": "discovery", "say": "Of course. What else can I help with?", "minConfidence": 0.7 },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    },
+    {
+      "id": "message",
+      "label": "Message: take it",
+      "flowStep": "message",
+      "agentLines": [{ "line": "Of course. What message should I pass along?" }],
+      "clarify": "Sorry, what message should I pass along?",
+      "decision": {
+        "question": "Did the caller give a message to pass on?",
+        "answers": [
+          {
+            "answer": "message_given",
+            "next": "text_offer",
+            "extract": { "as": "message_body", "with": "caller_line" },
+            "action": { "type": "save_details", "kind": "message", "from": "message_body" },
+            "minConfidence": 0.6,
+            "onBlocked": { "say": "I could not save that message. Let me have a person follow up.", "next": "discovery" }
+          },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    },
+    {
+      "id": "text_offer",
+      "label": "Message: offer a text",
+      "flowStep": "message",
+      "agentLines": [{ "line": "Thanks, your message is saved. Would you like a text to confirm?" }],
+      "promise": "your message is saved",
+      "clarify": "Sorry, would you like a text to confirm? Please say yes or no.",
+      "decision": {
+        "question": "Did the caller say yes to a confirmation text?",
+        "answers": [
+          { "answer": "no", "next": "message_wrap", "say": "No problem. Is there anything else I can help with?", "minConfidence": 0.7 },
+          {
+            "answer": "yes",
+            "next": "message_wrap",
+            "say": "Sent. Is there anything else I can help with?",
+            "action": { "type": "send_text", "body": "Thanks for contacting us. We have your message and will follow up." },
+            "minConfidence": 0.7,
+            "onBlocked": { "say": "I could not send the text, but your message is saved. Is there anything else I can help with?", "next": "message_wrap" }
+          },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    },
+    {
+      "id": "message_wrap",
+      "label": "Message wrap-up",
+      "flowStep": "message",
+      "clarify": "Sorry, is there anything else I can help with?",
+      "decision": {
+        "question": "Does the caller want anything else?",
+        "answers": [
+          { "answer": "no", "disposition": "message_left", "say": "Thank you. The team will be in touch. Goodbye.", "minConfidence": 0.7, "onBlocked": { "say": "Is there anything else I can help with?", "next": "discovery" } },
+          { "answer": "yes", "next": "discovery", "say": "Of course. What else can I help with?", "minConfidence": 0.7 },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    },
+    {
+      "id": "objection",
+      "label": "Objection",
+      "flowStep": "objection",
+      "agentLines": [{ "line": "I understand. We can send a quote with no obligation. Would you like to continue?" }],
+      "clarify": "Sorry, would you like to continue with a quote? Please say yes or no.",
+      "decision": {
+        "question": "After raising a concern, does the caller still want help?",
+        "answers": [
+          { "answer": "no", "disposition": "not_interested", "say": "Understood. Thank you for your time. Goodbye.", "minConfidence": 0.7, "onBlocked": { "say": "No problem at all. If you would rather not hear from us, just tell me you are not interested.", "next": "discovery" } },
+          { "answer": "yes", "next": "discovery", "say": "Great. How can I help?", "minConfidence": 0.7 },
+          { "answer": "unclear", "minConfidence": 0 }
+        ]
+      }
+    }
+  ]
+}

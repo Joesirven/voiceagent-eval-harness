@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lead setups</title>
+<style>
+  body { font: 14px/1.45 system-ui, sans-serif; margin: 0; padding: 16px 24px; color: #1b1b1f; background: #fafafa; max-width: 1100px; }
+  h1 { font-size: 18px; margin: 0 0 12px; } h2 { font-size: 14px; margin: 20px 0 8px; text-transform: uppercase; letter-spacing: .04em; color: #555; }
+  section { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; }
+  label { display: inline-block; margin: 0 12px 6px 0; font-size: 12px; color: #555; } label input, label select { display: block; font: inherit; padding: 4px 6px; min-width: 120px; }
+  button { font: inherit; padding: 5px 10px; margin: 2px 4px 2px 0; border: 1px solid #888; border-radius: 6px; background: #f2f2f2; cursor: pointer; }
+  button.primary { background: #1b4fd8; color: #fff; border-color: #1b4fd8; }
+  table { border-collapse: collapse; width: 100%; } td, th { text-align: left; padding: 4px 8px; border-bottom: 1px solid #eee; font-size: 13px; }
+  .muted { color: #777; } .err { color: #b00020; } .ok { color: #0a7a33; }
+  .fact { display: grid; grid-template-columns: 220px 1fr 120px 110px; gap: 8px; padding: 3px 0; border-bottom: 1px solid #f0f0f0; }
+  .tag { font-size: 11px; padding: 1px 6px; border-radius: 10px; background: #eee; width: fit-content; } .tag.packet { background: #dff3e4; } .tag.collect { background: #fde8c8; }
+  pre { white-space: pre-wrap; background: #f6f6f6; padding: 8px; border-radius: 6px; font-size: 12px; max-height: 260px; overflow: auto; }
+</style>
+</head>
+<body>
+<h1>Lead setups</h1>
+<div id="status" class="muted"></div>
+
+<section>
+  <h2>1. Pick a lead (development database)</h2>
+  <label>Search<input id="f-search" placeholder="business or owner"></label>
+  <label>Trade<input id="f-trade" placeholder="roofing"></label>
+  <label>X-date from<input id="f-from" type="date"></label>
+  <label>X-date to<input id="f-to" type="date"></label>
+  <label>Call history<select id="f-history"><option value="">either</option><option value="yes">has calls</option><option value="no">no calls</option></select></label>
+  <div><button id="b-search" class="primary">Search</button><button id="b-random">Random lead</button> <span id="picker-note" class="muted"></span></div>
+  <table id="leads"><thead><tr><th>Business</th><th>Owner</th><th>Trade</th><th>X-date</th><th>Carrier</th><th>Calls</th><th></th></tr></thead><tbody></tbody></table>
+</section>
+
+<section>
+  <h2>2. Setup</h2>
+  <div class="muted" id="chosen-lead">No lead chosen.</div>
+  <label>Voice module<select id="s-voice"></select></label>
+  <label>Decision module<select id="s-decision"></select></label>
+  <label>Prompt setup<select id="s-prompt"></select></label>
+  <label>Direction<select id="s-direction"><option value="inbound">inbound (lead calls back)</option><option value="outbound">outbound</option></select></label>
+  <label>Persona<select id="s-persona"><option value="">chosen from the lead</option></select></label>
+  <div>
+    <label>Setup name<input id="s-name" placeholder="roofer-baseline"></label>
+    <button id="b-save">Save setup</button><button id="b-apply" class="primary">Apply now</button>
+  </div>
+  <div id="setup-msg"></div>
+  <div>Saved setups: <span id="saved"></span></div>
+</section>
+
+<section>
+  <h2>3. Persona card (who you are pretending to be)</h2>
+  <div id="card" class="muted">Choose a lead to see the card.</div>
+</section>
+
+<section>
+  <h2>4. Prompt the agent gets</h2>
+  <pre id="prompt">Apply a setup to see the exact prompt.</pre>
+</section>
+
+<section>
+  <h2>5. Runs written to the harness database</h2>
+  <label><input type="checkbox" id="wb"> write every test call to harness_run in the local harness database. Clearing this lasts until the server restarts. VOICE_HARNESS_RUN_WRITEBACK=0 keeps it off.</label>
+  <table id="runs"><tbody></tbody></table>
+</section>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const api = async (path, opts) => {
+  const r = await fetch(path, opts && opts.body ? { method: "POST", headers: { "content-type": "application/json" }, ...opts } : opts);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw Object.assign(new Error(j.error || r.status), { status: r.status });
+  return j;
+};
+const el = (tag, text, cls) => { const e = document.createElement(tag); if (text !== undefined) e.textContent = text; if (cls) e.className = cls; return e; };
+let chosen = null, options = null;
+
+function fill(select, items, value) { select.replaceChildren(...items.map((i) => { const o = el("option", i.label); o.value = i.id; return o; })); if (value) select.value = value; }
+
+async function loadOptions() {
+  options = await api("/api/setups/options");
+  fill($("s-voice"), options.voiceModules, options.selectedVoiceModuleId);
+  fill($("s-decision"), options.decisionModules, options.selectedDecisionModuleId);
+  fill($("s-prompt"), options.promptSetups, options.defaultPromptSetupId);
+  const persona = $("s-persona");
+  persona.replaceChildren(Object.assign(el("option", "chosen from the lead"), { value: "" }), ...options.personas.map((p) => Object.assign(el("option", `${p.title} (${p.situation})`), { value: p.id })));
+  $("wb").checked = options.runWriteBack;
+  const saved = $("saved"); saved.replaceChildren();
+  for (const s of options.setups) { const b = el("button", s.name); b.onclick = () => useSaved(s); saved.append(b); }
+  $("status").textContent = options.developWrites ? "Develop writes are ON." : "Develop writes are off: real outbound dials and texts are refused.";
+}
+
+function useSaved(s) {
+  $("s-voice").value = s.voiceModuleId; $("s-decision").value = s.decisionModuleId; $("s-prompt").value = s.promptSetupId;
+  $("s-direction").value = s.direction; $("s-persona").value = s.personaId || ""; $("s-name").value = s.name;
+  chosen = { leadId: s.leadId, businessName: "(saved lead)" }; showChosen(); loadCard();
+}
+
+function showChosen() { $("chosen-lead").textContent = chosen ? `Lead: ${chosen.businessName} (${chosen.leadId})` : "No lead chosen."; }
+
+async function search(random) {
+  const q = new URLSearchParams();
+  for (const [k, id] of [["search", "f-search"], ["trade", "f-trade"], ["xFrom", "f-from"], ["xTo", "f-to"], ["history", "f-history"]]) if ($(id).value) q.set(k, $(id).value);
+  if (random) { q.set("random", "1"); q.set("limit", "1"); }
+  $("picker-note").textContent = "searching…"; $("picker-note").className = "muted";
+  try {
+    const r = await api("/api/setups/leads?" + q);
+    $("picker-note").textContent = `${r.candidates.length} shown; looked at ${r.scanned} leads${r.truncated ? " (the agency has more than that, so this is not everything)" : ""}.`;
+    const body = $("leads").tBodies[0]; body.replaceChildren();
+    for (const c of r.candidates) {
+      const tr = el("tr");
+      for (const v of [c.businessName, c.ownerName || "", c.trade || "", c.xDate || "unknown", c.xDateCarrier || "", c.hasCallHistory ? `${c.callCount} on file` : "none"]) tr.append(el("td", v));
+      const td = el("td"); const b = el("button", "Use"); b.onclick = () => { chosen = c; showChosen(); loadCard(); }; td.append(b); tr.append(td); body.append(tr);
+    }
+    if (random && r.candidates[0]) { chosen = r.candidates[0]; showChosen(); loadCard(); }
+  } catch (e) { $("picker-note").textContent = "Could not search: " + e.message; $("picker-note").className = "err"; }
+}
+
+async function loadCard() {
+  if (!chosen) return;
+  const q = new URLSearchParams({ promptSetupId: $("s-prompt").value });
+  if ($("s-persona").value) q.set("personaId", $("s-persona").value);
+  try { renderCard((await api(`/api/setups/leads/${chosen.leadId}/persona?` + q)).card); } catch (e) { $("card").textContent = "Could not load the card: " + e.message; }
+}
+
+function renderCard(card) {
+  const root = $("card"); root.replaceChildren(); root.className = "";
+  root.append(el("div", `${card.you.name}, ${card.you.role || "contact"} at ${card.you.business}${card.you.trade ? " (" + card.you.trade + ")" : ""}`, "tag"));
+  if (card.title) root.append(el("div", `${card.title} [${card.situation}]${card.language !== "en" ? " language: " + card.language : ""}`));
+  else root.append(el("div", "No lead script file found: the card lists the lead's facts only.", "muted"));
+  if (card.you.temperament) root.append(el("div", `Temperament: ${card.you.temperament}. Speech: ${card.you.speech || ""}`));
+  if (card.whyYouAreCalling) root.append(el("div", `Why you call: ${card.whyYouAreCalling}`));
+  if (card.missedCalls.length) root.append(el("div", `You saw ${card.missedCalls.length} missed calls: ${card.missedCalls.map((c) => c.at.slice(0, 10) + (c.simulated ? " (simulated)" : "")).join(", ")}`));
+  if (card.openingLine) root.append(el("div", `Say first: "${card.openingLine}"`));
+  root.append(el("h2", "Facts"));
+  for (const f of card.facts) {
+    const row = el("div", undefined, "fact");
+    row.append(el("span", f.label), el("span", f.value), el("span", f.reveal, "tag"), el("span", f.inAgentPacket ? "agent confirms" : "agent collects", "tag " + (f.inAgentPacket ? "packet" : "collect")));
+    root.append(row);
+  }
+  if (card.objections.length) { root.append(el("h2", "Objections, in order")); for (const o of card.objections) root.append(el("div", `${o.order}. [${o.class}] ${o.line}`)); }
+  if (card.reactions.length) { root.append(el("h2", "How to react")); for (const r of card.reactions) root.append(el("div", `If ${r.if}: ${r.then}`)); }
+  if (card.traits.length) { root.append(el("h2", "Hidden traits")); for (const t of card.traits) root.append(el("div", t)); }
+  if (card.droppedScriptTraits) root.append(el("div", `${card.droppedScriptTraits} script line(s) quoting other numbers were left out because the real record has its own.`, "muted"));
+  root.append(el("h2", "How to play")); for (const h of card.howToPlay) root.append(el("div", h, "muted"));
+}
+
+function currentSetup() {
+  if (!chosen) throw new Error("Pick a lead first.");
+  return { name: $("s-name").value, voiceModuleId: $("s-voice").value, decisionModuleId: $("s-decision").value, promptSetupId: $("s-prompt").value, direction: $("s-direction").value, leadId: chosen.leadId, personaId: $("s-persona").value || undefined };
+}
+function msg(text, cls) { $("setup-msg").textContent = text; $("setup-msg").className = cls || ""; }
+
+$("b-save").onclick = async () => {
+  try {
+    const body = currentSetup();
+    try { await api("/api/setups", { body: JSON.stringify(body) }); }
+    catch (e) { if (e.status === 409 && confirm(`A setup named "${body.name}" exists. Replace it?`)) await api("/api/setups", { body: JSON.stringify({ ...body, overwrite: true }) }); else throw e; }
+    msg("Saved.", "ok"); await loadOptions();
+  } catch (e) { msg("Not saved: " + e.message, "err"); }
+};
+$("b-apply").onclick = async () => {
+  try {
+    const r = await api("/api/setups/apply", { body: JSON.stringify({ ...currentSetup(), name: $("s-name").value || "unsaved" }) });
+    msg(`Applied. AI calling is on in the harness for agency ${r.aiCallingEnabledForAgency}. Now start the call from the control page.`, "ok");
+    $("prompt").textContent = r.promptPreview; renderCard(r.card);
+  } catch (e) { msg("Not applied: " + e.message, "err"); }
+};
+$("b-search").onclick = () => search(false); $("b-random").onclick = () => search(true);
+$("s-prompt").onchange = loadCard; $("s-persona").onchange = loadCard;
+$("wb").onchange = async () => { try { await api("/api/setups/write-back", { body: JSON.stringify({ enabled: $("wb").checked }) }); } catch (e) { msg(e.message, "err"); } };
+
+async function loadRuns() {
+  try {
+    const r = await api("/api/setups/runs"); const body = $("runs").tBodies[0]; body.replaceChildren();
+    for (const run of r.runs) {
+      const tr = el("tr"); tr.append(el("td", run.recordId), el("td", run.status, run.status === "failed" || run.status === "refused" ? "err" : ""), el("td", run.error || ""));
+      const td = el("td"); const b = el("button", "Write again"); b.onclick = async () => { try { await api(`/api/setups/runs/${run.recordId}/write-back`, { body: "{}" }); } catch (e) { msg(e.message, "err"); } loadRuns(); }; td.append(b); tr.append(td); body.append(tr);
+    }
+  } catch (e) { /* page still usable */ }
+}
+loadOptions().then(() => search(false)); setInterval(loadRuns, 4000); loadRuns();
+</script>
+</body>
+</html>

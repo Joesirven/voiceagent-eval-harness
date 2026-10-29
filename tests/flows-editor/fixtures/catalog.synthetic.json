@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "templates": {
+    "fixture_template": "Fixed fixture text."
+  },
+  "tools": [
+    {
+      "name": "fixture_tool_0",
+      "area": "lead_and_contact",
+      "description": "Synthetic tool with status runs_in_harness_memory.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "trace": "fixture",
+      "handler": "handle_fixture_tool_0",
+      "crmTarget": "fixture_target",
+      "risk": "read_only",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "runs_in_harness_memory",
+      "statusNote": "Fixture note for runs_in_harness_memory."
+    },
+    {
+      "name": "fixture_tool_1",
+      "area": "scheduling_and_booking",
+      "description": "Synthetic tool with status queued_after_call.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "trace": "fixture",
+      "handler": "handle_fixture_tool_1",
+      "crmTarget": "fixture_target",
+      "risk": "reversible_write",
+      "judgeAction": "did_the_caller_agree",
+      "credential": "service_role_key",
+      "status": "queued_after_call",
+      "statusNote": "Fixture note for queued_after_call."
+    },
+    {
+      "name": "fixture_tool_2",
+      "area": "transfer_and_handoff",
+      "description": "Synthetic tool with status reads_development_project.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "trace": "fixture",
+      "handler": "handle_fixture_tool_2",
+      "crmTarget": "fixture_target",
+      "risk": "read_only",
+      "judgeAction": null,
+      "credential": "service_role_key",
+      "status": "reads_development_project",
+      "statusNote": "Fixture note for reads_development_project."
+    },
+    {
+      "name": "fixture_tool_3",
+      "area": "messaging",
+      "description": "Synthetic tool with status needs_seat_session.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "trace": "fixture",
+      "handler": "handle_fixture_tool_3",
+      "crmTarget": "fixture_target",
+      "risk": "reversible_write",
+      "judgeAction": "did_the_caller_agree",
+      "credential": "seat_session",
+      "status": "needs_seat_session",
+      "statusNote": "Fixture note for needs_seat_session."
+    },
+    {
+      "name": "fixture_tool_4",
+      "area": "endings",
+      "description": "Synthetic tool with status needs_admin_machine_credential.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "trace": "fixture",
+      "handler": "handle_fixture_tool_4",
+      "crmTarget": "fixture_target",
+      "risk": "hard_to_undo",
+      "judgeAction": "is_the_caller_sure",
+      "credential": "admin_machine_credential",
+      "status": "needs_admin_machine_credential",
+      "statusNote": "Fixture note for needs_admin_machine_credential."
+    },
+    {
+      "name": "fixture_tool_5",
+      "area": "information_lookups",
+      "description": "Synthetic tool with status blocked_on_dana.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "trace": "fixture",
+      "handler": "handle_fixture_tool_5",
+      "crmTarget": "fixture_target",
+      "risk": "reversible_write",
+      "judgeAction": "did_the_caller_agree",
+      "credential": "seat_session",
+      "status": "blocked_on_dana",
+      "statusNote": "Fixture note for blocked_on_dana."
+    },
+    {
+      "name": "fixture_tool_6",
+      "area": "lead_and_contact",
+      "description": "Synthetic tool with status not_yet_built.",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "note": {
+            "type": "string"
+          }
+        },
+        "required": []
+      },
+      "trace": "fixture",
+      "handler": null,
+      "crmTarget": "fixture_target",
+      "risk": "hard_to_undo",
+      "judgeAction": "is_the_caller_sure",
+      "credential": "admin_machine_credential",
+      "status": "not_yet_built",
+      "statusNote": "Fixture note for not_yet_built."
+    }
+  ]
+}

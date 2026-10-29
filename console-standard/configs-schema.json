@@ -1,0 +1,55 @@
+{
+  "sttModels": [
+    "nova-3-general",
+    "nova-2-general",
+    "nova-2-phonecall",
+    "nova-2-conversationalai"
+  ],
+  "replyDeployments": [
+    "default",
+    "gpt-5.4-mini",
+    "gpt-5.6-luna",
+    "gpt-5.6-terra"
+  ],
+  "voicePattern": "^aura-2-[a-z]{1,40}-en$",
+  "endpointingMs": {
+    "min": 100,
+    "max": 1500
+  },
+  "vadStopSecs": {
+    "min": 0.1,
+    "max": 1.0
+  },
+  "nameMaxLength": 40,
+  "maxSaved": 50,
+  "defaults": {
+    "sttModel": "nova-3-general",
+    "replyDeployment": "default",
+    "voice": "aura-2-thalia-en",
+    "endpointingMs": 300,
+    "vadStopSecs": 0.2,
+    "voicePath": "cascaded_deepgram",
+    "orchestration": "single_prompt",
+    "promptSetup": "default",
+    "lead": "lead-1",
+    "direction": "inbound"
+  },
+  "voicePaths": [
+    "cascaded_deepgram"
+  ],
+  "orchestrations": [
+    "single_prompt",
+    "pipecat_flows",
+    "quote_prototype"
+  ],
+  "promptSetupPattern": "^[a-z0-9][a-z0-9-]{0,39}$",
+  "leads": [
+    "lead-1",
+    "lead-2",
+    "lead-3"
+  ],
+  "directions": [
+    "inbound",
+    "outbound"
+  ]
+}

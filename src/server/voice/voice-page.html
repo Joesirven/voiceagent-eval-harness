@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Simulator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  html, body { height: 100%; margin: 0; overflow: hidden; }
+  body { display: flex; flex-direction: column; font: 13px/1.35 system-ui, sans-serif; color: #1b1f24; background: #f6f7f9; }
+  header, .bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 8px 12px; background: #fff; border-bottom: 1px solid #d5d9e0; }
+  h1 { font-size: 14px; margin: 0 8px 0 0; }
+  a { color: #14213d; }
+  button, select, input { font: inherit; min-height: 32px; }
+  button { padding: 4px 10px; border: 1px solid #14213d; background: #fff; border-radius: 6px; cursor: pointer; }
+  button.primary { background: #14213d; color: #fff; }
+  button.on { background: #2ea043; border-color: #2ea043; color: #fff; }
+  button.off { background: #c0392b; border-color: #c0392b; color: #fff; }
+  main { flex: 1; min-height: 0; display: grid; grid-template-rows: auto 1fr auto; gap: 8px; padding: 8px 12px; }
+  .scroll { min-height: 0; overflow: auto; background: #fff; border: 1px solid #d5d9e0; border-radius: 8px; }
+  table { border-collapse: collapse; width: 100%; font-size: 12px; }
+  th, td { text-align: left; padding: 4px 8px; border-bottom: 1px solid #e6e9ee; }
+  .outcome-blocked, .outcome-skipped { color: #b3261e; }
+  .outcome-placed, .outcome-answered, .outcome-message_sent { color: #1a7f37; }
+  .err { color: #b3261e; }
+  dialog { border: 1px solid #d5d9e0; border-radius: 8px; padding: 12px; }
+  dialog label { display: block; margin-top: 8px; font-size: 12px; }
+  #timeline { max-height: 28vh; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Simulator</h1>
+  <a href="/">Live</a>
+  <span id="flags"></span>
+  <select id="modulePick" aria-label="Module"></select>
+  <button id="openSettings" type="button">Settings</button>
+  <span id="error" class="err"></span>
+</header>
+<main>
+  <div class="bar">
+    <select id="scenario" aria-label="Scenario"></select>
+    <button id="run" class="primary" type="button">Run</button>
+    <span id="scenarioSummary"></span>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead><tr><th>at</th><th>channel</th><th>direction</th><th>outcome</th><th>reason</th></tr></thead>
+      <tbody id="logBody"></tbody>
+    </table>
+  </div>
+  <div class="bar">
+    <input id="timelineLead" value="lead-1" aria-label="Lead id" style="width:8em">
+    <button id="timelineGo" type="button">Timeline</button>
+  </div>
+</main>
+<div id="timeline" class="scroll"></div>
+<dialog id="settings">
+  <form method="dialog"><button value="close">Close</button></form>
+  <div id="panel"></div>
+</dialog>
+<script type="module">
+let state = null;
+const el = (tag, props = {}, ...kids) => {
+  const n = Object.assign(document.createElement(tag), props);
+  for (const k of kids) n.append(k);
+  return n;
+};
+async function api(path, body) {
+  const res = await fetch(path, body === undefined ? {} : { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error || res.statusText);
+  return json;
+}
+function fail(e) { document.getElementById("error").textContent = e.message; }
+
+function render() {
+  const flags = document.getElementById("flags");
+  flags.replaceChildren();
+  for (const a of state.agencies) {
+    flags.append(el("button", {
+      className: a.aiCallingEnabled ? "on" : "off",
+      textContent: a.aiCallingEnabled ? `${a.id} on` : `${a.id} off`,
+      onclick: () => api("/api/flag", { agencyId: a.id, enabled: !a.aiCallingEnabled }).then(apply).catch(fail),
+    }));
+  }
+  const pick = document.getElementById("modulePick");
+  const selected = pick.value || state.selectedModuleId;
+  pick.replaceChildren(...state.modules.map((m) => el("option", {
+    value: m.id,
+    textContent: `${m.label}${m.config.enabled ? "" : " off"}${m.id === state.selectedModuleId ? " ·" : ""}`,
+  })));
+  pick.value = state.modules.some((m) => m.id === selected) ? selected : state.selectedModuleId;
+  const scenario = document.getElementById("scenario");
+  const keep = scenario.value;
+  scenario.replaceChildren(...state.scenarios.map((s) => el("option", { value: s.id, textContent: s.title })));
+  if ([...scenario.options].some((o) => o.value === keep)) scenario.value = keep;
+}
+
+function apply(next) { state = next; render(); }
+
+function settings() {
+  const m = state.modules.find((x) => x.id === document.getElementById("modulePick").value);
+  const panel = document.getElementById("panel");
+  const field = (label, value, type = "text") => {
+    const input = el("input", { type, value });
+    panel.append(el("label", {}, label), input);
+    return input;
+  };
+  panel.replaceChildren(el("button", {
+    className: m.config.enabled ? "on" : "off",
+    textContent: m.config.enabled ? "Enabled" : "Disabled",
+    onclick: () => api(`/api/modules/${m.id}`, { enabled: !m.config.enabled, source: "voice-page" }).then((s) => { apply(s); settings(); }).catch(fail),
+  }), el("button", {
+    textContent: m.id === state.selectedModuleId ? "Routed" : "Use",
+    disabled: m.id === state.selectedModuleId,
+    onclick: () => api("/api/select", { moduleId: m.id }).then(apply).catch(fail),
+  }));
+  const voice = field("Voice", m.config.voice);
+  const model = field("Model", m.config.model);
+  const first = field("First response ms", m.config.latency.firstResponseMs, "number");
+  const end = field("Endpoint ms", m.config.latency.endpointingMs, "number");
+  panel.append(el("button", {
+    className: "primary", textContent: "Save",
+    onclick: () => api(`/api/modules/${m.id}`, {
+      voice: voice.value, model: model.value,
+      latency: { firstResponseMs: Number(first.value), endpointingMs: Number(end.value) },
+      source: "voice-page",
+    }).then(apply).catch(fail),
+  }));
+  document.getElementById("settings").showModal();
+}
+
+document.getElementById("openSettings").onclick = () => settings();
+document.getElementById("run").onclick = () => {
+  const id = document.getElementById("scenario").value;
+  api(`/api/scenarios/${id}/run`, {}).then((r) => {
+    document.getElementById("scenarioSummary").textContent = r.summary;
+    document.getElementById("logBody").replaceChildren(...r.logs.map((l) => {
+      const tr = el("tr");
+      for (const v of [l.at.slice(11, 19), l.channel, l.direction || "", l.outcome, l.reason]) {
+        tr.append(el("td", { className: v === l.outcome ? "outcome-" + l.outcome : "", textContent: v }));
+      }
+      return tr;
+    }));
+  }).catch(fail);
+};
+document.getElementById("timelineGo").onclick = () => {
+  const id = document.getElementById("timelineLead").value.trim();
+  api(`/api/leads/${encodeURIComponent(id)}/timeline`).then((t) => {
+    const box = document.getElementById("timeline");
+    box.replaceChildren(...t.items.map((item) => el("div", {}, item.plain || "")));
+  }).catch(fail);
+};
+
+api("/api/state").then(apply).catch(fail);
+</script>
+</body>
+</html>

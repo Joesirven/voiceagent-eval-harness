@@ -1,0 +1,12 @@
+node_modules
+/data/
+# Whisker session recordings of calls (call content stays on this machine); already covered by /data/.
+/data/whisker/
+web/dist
+__pycache__/
+designs/dist/
+supabase/.temp/
+console-standard/logs
+console-standard/web/node_modules
+console-standard/web/dist
+console-standard/configs.saved.json

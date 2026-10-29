@@ -1,0 +1,118 @@
+{
+  "initial_node": "greeting",
+  "nodes": {
+    "greeting": {
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Introduce Northwind Insurance Agency. Say the call concerns Riverside Plumbing's policy renewal. Ask for consent to continue, then confirm that the caller handles the renewal. If the caller refuses or asks you to stop, end politely."
+        }
+      ],
+      "functions": [
+        {
+          "name": "right_person",
+          "description": "The caller consents and confirms they handle the renewal.",
+          "transition_to": "quote_questions",
+          "transition_only": true
+        },
+        {
+          "name": "not_interested",
+          "description": "The caller clearly says they are not interested.",
+          "transition_to": "close",
+          "transition_only": true
+        },
+        {
+          "name": "stop_calling",
+          "description": "The caller asks the agency to stop calling.",
+          "transition_to": "stop",
+          "transition_only": true
+        }
+      ]
+    },
+    "quote_questions": {
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Ask for the current employee count, then the estimated annual payroll. Ask one question at a time. When both answers are clear, move to the producer call offer."
+        }
+      ],
+      "functions": [
+        {
+          "name": "quote_answers_complete",
+          "description": "The caller gave both the employee count and annual payroll.",
+          "transition_to": "producer_offer",
+          "transition_only": true
+        },
+        {
+          "name": "not_interested",
+          "description": "The caller clearly says they are not interested.",
+          "transition_to": "close",
+          "transition_only": true
+        },
+        {
+          "name": "stop_calling",
+          "description": "The caller asks the agency to stop calling.",
+          "transition_to": "stop",
+          "transition_only": true
+        }
+      ]
+    },
+    "producer_offer": {
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Offer a short renewal call with Dana Reyes, a licensed producer. If the caller accepts, ask for a day and time and confirm it before booking."
+        }
+      ],
+      "functions": [
+        {
+          "name": "book_producer",
+          "description": "The caller confirmed the chosen day and time.",
+          "transition_to": "close",
+          "transition_only": true
+        },
+        {
+          "name": "declines_booking",
+          "description": "The caller declines the producer call.",
+          "transition_to": "close",
+          "transition_only": true
+        },
+        {
+          "name": "stop_calling",
+          "description": "The caller asks the agency to stop calling.",
+          "transition_to": "stop",
+          "transition_only": true
+        }
+      ]
+    },
+    "stop": {
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Confirm that the caller wants Northwind Insurance Agency to stop calling. Acknowledge the confirmed request and end the call."
+        }
+      ],
+      "functions": [
+        {
+          "name": "confirm_stop",
+          "description": "The caller confirms the stop request.",
+          "transition_to": "close",
+          "transition_only": true
+        }
+      ]
+    },
+    "close": {
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Thank the caller. Confirm a producer call only if one was booked. Say goodbye and do not ask another question."
+        }
+      ],
+      "post_actions": [
+        {
+          "type": "end_conversation"
+        }
+      ]
+    }
+  }
+}

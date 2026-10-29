@@ -1,0 +1,123 @@
+{
+  "initial_node": "greet",
+  "global_functions": [
+    {
+      "name": "request_producer",
+      "transition_only": true,
+      "description": "The caller asks to talk to a person, the producer, the agent or the owner, at any point in the call.",
+      "transition_to": "producer_request"
+    }
+  ],
+  "nodes": {
+    "greet": {
+      "role_message": "You are a friendly, brief phone assistant for an insurance agency. You speak in short, natural sentences, one question at a time. Never invent facts about the caller's business. Use the lead details you were given and do not ask again for anything already known.",
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "The opening line has already been said to the caller: \"This is {producer}'s automated assistant with {agency}. Am I speaking with {firstName}?\" Do not say it again and do not add any other disclosure. Wait for the caller's answer. When they confirm who they are, call confirm_identity. If it is the wrong person or they cannot talk, call wrong_person."
+        }
+      ],
+      "functions": [
+        {
+          "name": "confirm_identity",
+          "transition_only": true,
+          "description": "The caller confirms they are the person we are trying to reach.",
+          "transition_to": "collect_quote_info"
+        },
+        {
+          "name": "wrong_person",
+          "transition_only": true,
+          "description": "Wrong person, or they cannot talk now.",
+          "transition_to": "wrap_up"
+        }
+      ],
+      "respond_immediately": false
+    },
+    "collect_quote_info": {
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Gather what is still needed to build a workers' compensation quote. The lead context you were given lists the details already known and the ones missing (the business name, what the business does, the number of employees, the annual payroll, the current insurance carrier and the renewal date). Do not ask for anything already known. Ask only for the missing ones, one question at a time. Each time the caller gives one, call save_quote_field with the field and the value in their words. When nothing is missing, call start_quote and then call quote_info_complete."
+        }
+      ],
+      "functions": [
+        {
+          "name": "save_quote_field"
+        },
+        {
+          "name": "start_quote"
+        },
+        {
+          "name": "quote_info_complete",
+          "transition_only": true,
+          "description": "All six quote details are known and the quote has been started.",
+          "transition_to": "deliver_quote"
+        }
+      ]
+    },
+    "deliver_quote": {
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Tell the caller the quote is being prepared and offer to send them the link by text or by email. Ask which they prefer, and confirm the phone number or email address. Then call send_quote_link with the channel and the destination."
+        }
+      ],
+      "functions": [
+        {
+          "name": "send_quote_link",
+          "transition_to": "wrap_up"
+        }
+      ]
+    },
+    "producer_request": {
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "The caller wants to talk to the producer. Say you will check, then call check_producer_available. If the result says available, tell them you are connecting them and call transfer_to_producer. If not, say the producer is not free right now, offer to take a message, and when they have given it call take_message with the message in their words."
+        }
+      ],
+      "functions": [
+        {
+          "name": "check_producer_available"
+        },
+        {
+          "name": "transfer_to_producer",
+          "transition_to": "end"
+        },
+        {
+          "name": "take_message",
+          "transition_to": "wrap_up"
+        }
+      ]
+    },
+    "wrap_up": {
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Confirm in one or two sentences what happens next: what was sent or noted, and that the producer will follow up with a text about the quote. Ask if there is anything else. When they are done, call finish_call."
+        }
+      ],
+      "functions": [
+        {
+          "name": "finish_call",
+          "transition_only": true,
+          "description": "The caller has nothing else; end the call.",
+          "transition_to": "end"
+        }
+      ]
+    },
+    "end": {
+      "task_messages": [
+        {
+          "role": "developer",
+          "content": "Thank the caller warmly and say goodbye in one short sentence. Do not call any function."
+        }
+      ],
+      "post_actions": [
+        {
+          "type": "end_conversation"
+        }
+      ]
+    }
+  }
+}

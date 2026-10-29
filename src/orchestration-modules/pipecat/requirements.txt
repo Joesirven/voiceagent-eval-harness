@@ -1,0 +1,8 @@
+# Python >=3.11; verified with Python 3.12.12. Rebuild the interpreter with:
+#   uv venv --python 3.12 /tmp/crm-pipecat-venv
+#   uv pip install --python /tmp/crm-pipecat-venv/bin/python -r src/orchestration-modules/pipecat/requirements.txt
+# The deepgram extra (Deepgram speech to text and text to speech services) was
+# added on 2026-10-19 with pipecat-ai unchanged at 1.13.0; it adds deepgram-sdk,
+# httpx, httpcore and certifi. No other transport or model extras.
+pipecat-ai[deepgram]==1.13.0
+deepgram-sdk==7.13.0

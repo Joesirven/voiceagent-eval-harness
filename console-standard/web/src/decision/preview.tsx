@@ -1,0 +1,12 @@
+import "@pipecat-ai/voice-ui-kit/styles.css";
+import "../app.css";
+import "../brand.css";
+import { createRoot } from "react-dom/client";
+import { DecisionMap } from "./DecisionMap";
+import { applyDecisionEvent, emptyDecisionState } from "./state";
+import flow from "../../../flows/quote-prototype.flow.json";
+const nodes = Object.entries(flow.nodes).map(([id, node]) => ({ id, branches: [...("functions" in node ? node.functions : []), ...flow.global_functions].map((f) => ({ label: f.name, target: "transition_to" in f ? f.transition_to : undefined })) }));
+let state = applyDecisionEvent(emptyDecisionState, { type: "flow", event: "map", nodes });
+for (const node of ["greet", "collect_quote_info", "producer_request"]) state = applyDecisionEvent(state, { type: "flow", event: "node_enter", node });
+if (location.search.includes("dark")) document.documentElement.classList.add("dark");
+createRoot(document.getElementById("root")!).render(<main className="console-console" style={{ height: "100vh", overflow: "auto" }}><h1 style={{ padding: "16px 24px", fontSize: 16 }}>Agent decision map <small>· Preview data</small></h1><DecisionMap state={state} /></main>);

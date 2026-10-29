@@ -1,0 +1,19 @@
+.tool { border: 1px solid var(--color-border); border-radius: var(--radius); background: var(--color-card); color: var(--color-card-foreground); margin: 0.25rem 0; width: 100%; max-width: 36rem; font-size: 0.8125rem; }
+.tool-header { display: flex; align-items: center; gap: 0.5rem; padding: 0.45rem 0.65rem; cursor: pointer; list-style: none; }
+.tool-header::-webkit-details-marker { display: none; }
+.tool-icon { width: 0.9rem; height: 0.9rem; color: var(--color-muted-foreground); flex: none; }
+.tool-name { font-family: var(--font-mono); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tool-badge { display: inline-flex; align-items: center; gap: 0.3rem; margin-left: auto; padding: 0.05rem 0.5rem; border-radius: 999px; font-size: 0.7rem; font-weight: 500; background: var(--color-muted); color: var(--color-muted-foreground); }
+.tool-badge-dot { width: 0.4rem; height: 0.4rem; border-radius: 999px; background: currentColor; }
+.tool-badge-running { background: var(--color-accent); color: var(--color-accent-foreground); }
+.tool-badge-running .tool-badge-dot { animation: tool-pulse 1s ease-in-out infinite; }
+.tool-badge-done { background: var(--color-active-accent); color: var(--color-active); }
+.tool-badge-failed { background: color-mix(in oklch, var(--color-destructive) 12%, transparent); color: var(--color-destructive); }
+.tool-chevron { width: 0.9rem; height: 0.9rem; color: var(--color-muted-foreground); transition: transform 150ms; flex: none; }
+.tool[open] .tool-chevron { transform: rotate(180deg); }
+.tool-content { border-top: 1px solid var(--color-border); padding: 0.5rem 0.65rem 0.65rem; display: grid; gap: 0.5rem; }
+.tool-section-title { margin: 0 0 0.25rem; font-size: 0.68rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--color-muted-foreground); }
+.tool-code { margin: 0; padding: 0.5rem 0.6rem; border-radius: calc(var(--radius) - 0.25rem); background: var(--color-muted); font-family: var(--font-mono); font-size: 0.75rem; white-space: pre-wrap; word-break: break-word; }
+.tool-code-error { color: var(--color-destructive); }
+@keyframes tool-pulse { 50% { opacity: 0.35; } }
+@media (prefers-reduced-motion: reduce) { .tool-badge-running .tool-badge-dot { animation: none; } }
